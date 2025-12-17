@@ -1,3 +1,5 @@
+import { TECH_SKILLS } from "../lib/fieldsdata";
+
 const Home = () => {
   return (
     <div className="bg-gray-50 text-gray-800">
@@ -105,113 +107,24 @@ const Home = () => {
       <section className="bg-gray-100 py-20">
         <div className="max-w-6xl mx-auto px-6 text-center">
           <h2 className="text-3xl font-bold mb-6">
-            Built with Modern Technologies
+            Hiring Open Across These Technical Fields
           </h2>
 
           <p className="text-gray-600 max-w-3xl mx-auto mb-10">
-            This platform is developed using industry-standard tools to ensure
-            performance, scalability, and maintainability.
+            Companies are actively hiring skilled professionals in these
+            technical areas and much more. Explore opportunities and prepare yourself for
+            roles in high-demand domains.
           </p>
 
           <div className="flex flex-wrap justify-center gap-6">
-            {/* Frontend */}
-            <span className="bg-white px-6 py-3 rounded-full shadow text-sm">
-              HTML5
-            </span>
-            <span className="bg-white px-6 py-3 rounded-full shadow text-sm">
-              CSS3
-            </span>
-            <span className="bg-white px-6 py-3 rounded-full shadow text-sm">
-              JavaScript
-            </span>
-            <span className="bg-white px-6 py-3 rounded-full shadow text-sm">
-              TypeScript
-            </span>
-            <span className="bg-white px-6 py-3 rounded-full shadow text-sm">
-              React
-            </span>
-            <span className="bg-white px-6 py-3 rounded-full shadow text-sm">
-              Next.js
-            </span>
-            <span className="bg-white px-6 py-3 rounded-full shadow text-sm">
-              Tailwind CSS
-            </span>
-            <span className="bg-white px-6 py-3 rounded-full shadow text-sm">
-              Responsive Design
-            </span>
-
-            {/* Backend */}
-            <span className="bg-white px-6 py-3 rounded-full shadow text-sm">
-              Node.js
-            </span>
-            <span className="bg-white px-6 py-3 rounded-full shadow text-sm">
-              Express.js
-            </span>
-            <span className="bg-white px-6 py-3 rounded-full shadow text-sm">
-              REST APIs
-            </span>
-            <span className="bg-white px-6 py-3 rounded-full shadow text-sm">
-              JWT Authentication
-            </span>
-            <span className="bg-white px-6 py-3 rounded-full shadow text-sm">
-              Role-Based Access
-            </span>
-
-            {/* Databases */}
-            <span className="bg-white px-6 py-3 rounded-full shadow text-sm">
-              MongoDB
-            </span>
-            <span className="bg-white px-6 py-3 rounded-full shadow text-sm">
-              Mongoose
-            </span>
-            <span className="bg-white px-6 py-3 rounded-full shadow text-sm">
-              SQL Basics
-            </span>
-
-            {/* Cloud & Storage */}
-            <span className="bg-white px-6 py-3 rounded-full shadow text-sm">
-              Cloudinary
-            </span>
-            <span className="bg-white px-6 py-3 rounded-full shadow text-sm">
-              AWS S3
-            </span>
-            <span className="bg-white px-6 py-3 rounded-full shadow text-sm">
-              Azure Blob Storage
-            </span>
-            <span className="bg-white px-6 py-3 rounded-full shadow text-sm">
-              File Upload Handling
-            </span>
-
-            {/* Tools */}
-            <span className="bg-white px-6 py-3 rounded-full shadow text-sm">
-              Git
-            </span>
-            <span className="bg-white px-6 py-3 rounded-full shadow text-sm">
-              GitHub
-            </span>
-            <span className="bg-white px-6 py-3 rounded-full shadow text-sm">
-              Postman
-            </span>
-            <span className="bg-white px-6 py-3 rounded-full shadow text-sm">
-              VS Code
-            </span>
-
-            {/* Concepts */}
-            <span className="bg-white px-6 py-3 rounded-full shadow text-sm">
-              MVC Architecture
-            </span>
-            <span className="bg-white px-6 py-3 rounded-full shadow text-sm">
-              API Security
-            </span>
-            <span className="bg-white px-6 py-3 rounded-full shadow text-sm">
-              State Management
-            </span>
-            <span className="bg-white px-6 py-3 rounded-full shadow text-sm">
-              Zustand
-            </span>
-            <span className="bg-white px-6 py-3 rounded-full shadow text-sm">
-              Performance Optimization
-            </span>
+            {TECH_SKILLS.map((skill) => (
+              <span
+                key={skill}
+                className="bg-white px-6 py-3 rounded-full shadow text-sm"
+              >
+                {skill}
+              </span>
+            ))}
           </div>
         </div>
       </section>

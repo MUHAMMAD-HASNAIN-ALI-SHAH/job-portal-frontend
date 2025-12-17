@@ -1,17 +1,12 @@
 import { create } from "zustand";
 import axiosInstance from "../lib/axios";
 import { toast } from "react-toastify";
-import type {
-  ApplicantForm,
-  Recruiter,
-  RecruiterForm,
-  User,
-} from "../interfaces";
+import type { ApplicantForm, RecruiterForm, User } from "../interfaces";
 import useApplicantStore from "./useApplicantStore";
+import useRecruiterStore from "./useRecruiterScore";
 
 interface AuthState {
   user: User | null; // to store user email, _id and role
-  recruiter: Recruiter | null; // to store recruiter details
   applicantForm: ApplicantForm; // to store applicant registration form data
   recruiterForm: RecruiterForm; // to store recruiter registration form data
   code: string; // to store verification code
@@ -35,7 +30,6 @@ interface AuthState {
 const useAuthStore = create<AuthState>((set) => ({
   user: null,
   applicant: null,
-  recruiter: null,
   applicantForm: {
     fullName: "",
     email: "",
@@ -120,8 +114,11 @@ const useAuthStore = create<AuthState>((set) => ({
         password,
       });
       set({ user: response.data.user, isAuthenticated: true });
-      if(response.data.user.role === "applicant") {
+      if (response.data.user.role === "applicant") {
         useApplicantStore.getState().getApplicantDetails();
+      }
+      if (response.data.user.role === "recruiter") {
+        useRecruiterStore.getState().getRecruiterDetails();
       }
       return 200;
     } catch (error: any) {
@@ -151,8 +148,11 @@ const useAuthStore = create<AuthState>((set) => ({
         user: response.data.user,
         isAuthenticated: true,
       });
-      if(response.data.user.role === "applicant") {
+      if (response.data.user.role === "applicant") {
         useApplicantStore.getState().getApplicantDetails();
+      }
+      if (response.data.user.role === "recruiter") {
+        useRecruiterStore.getState().getRecruiterDetails();
       }
       set({ isAuthenticatedLoading: false });
     } catch (error: any) {
