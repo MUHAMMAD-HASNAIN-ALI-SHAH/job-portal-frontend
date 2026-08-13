@@ -1,157 +1,187 @@
+import Footer from "../components/Footer";
+import Navbar from "../components/Navbar";
 import { TECH_SKILLS } from "../lib/fieldsdata";
 
 const Home = () => {
   return (
-    <div className="bg-gray-50 text-gray-800">
-      {/* ================= HERO ================= */}
-      <section className="bg-white py-24">
-        <div className="max-w-6xl mx-auto px-6 text-center flex flex-col gap-6">
-          <h1 className="text-4xl sm:text-5xl font-bold text-gray-900">
-            A Smarter Way to Build Your Career
-          </h1>
+    <>
+      <Navbar />
+      <div className="bg-white text-slate-800">
+        {/* ================= HERO ================= */}
+        <section className="bg-slate-50 py-24">
+          <div className="max-w-6xl mx-auto px-6 text-center flex flex-col gap-6">
+            <span className="inline-flex w-fit mx-auto items-center gap-2 bg-indigo-50 text-indigo-700 text-xs font-medium px-3 py-1 rounded-full">
+              Launching soon
+            </span>
 
-          <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-            We are building a modern job portal that helps candidates showcase
-            their skills and enables companies to hire the right talent — faster
-            and smarter.
-          </p>
+            <h1 className="text-4xl sm:text-5xl font-bold text-slate-900 tracking-tight">
+              A smarter way to build your career
+            </h1>
 
-          <div className="flex justify-center gap-4 mt-6">
-            <button className="bg-blue-600 text-white px-8 py-3 rounded-md hover:bg-blue-700">
-              Get Started
-            </button>
-            <button className="border border-gray-300 px-8 py-3 rounded-md hover:bg-gray-100">
-              Learn More
-            </button>
-          </div>
-        </div>
-      </section>
-
-      {/* ================= ABOUT PLATFORM ================= */}
-      <section className="bg-gray-100 py-20">
-        <div className="max-w-6xl mx-auto px-6 grid grid-cols-1 sm:grid-cols-2 gap-12 items-center">
-          <div className="flex flex-col gap-4">
-            <h2 className="text-3xl font-bold">
-              Built for Job Seekers & Employers
-            </h2>
-            <p className="text-gray-600">
-              Our platform is designed to simplify the hiring process. Whether
-              you're a student, a professional, or a company — everything is
-              crafted to be easy, fast, and reliable.
+            <p className="text-lg text-slate-600 max-w-3xl mx-auto">
+              We're building a modern job portal that helps candidates showcase
+              their skills and enables companies to hire the right talent —
+              faster and smarter.
             </p>
-            <p className="text-gray-600">
-              From profile creation to resume management, we focus on providing
-              clean and efficient user experiences.
-            </p>
-          </div>
 
-          <div className="bg-white rounded-xl p-10 shadow">
-            <ul className="flex flex-col gap-4">
-              <li className="flex items-center gap-3">
-                <span className="w-2 h-2 bg-blue-600 rounded-full"></span>
-                Secure user profiles
-              </li>
-              <li className="flex items-center gap-3">
-                <span className="w-2 h-2 bg-blue-600 rounded-full"></span>
-                Resume upload & management
-              </li>
-              <li className="flex items-center gap-3">
-                <span className="w-2 h-2 bg-blue-600 rounded-full"></span>
-                Company dashboards
-              </li>
-              <li className="flex items-center gap-3">
-                <span className="w-2 h-2 bg-blue-600 rounded-full"></span>
-                Scalable & modern architecture
-              </li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      {/* ================= FEATURES ================= */}
-      <section className="bg-white py-24">
-        <div className="max-w-6xl mx-auto px-6">
-          <h2 className="text-3xl font-bold text-center mb-14">
-            Platform Highlights
-          </h2>
-
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-10">
-            <div className="bg-gray-50 p-8 rounded-xl shadow-sm">
-              <h3 className="text-xl font-semibold mb-3">Modern UI & UX</h3>
-              <p className="text-gray-600">
-                Clean layouts, responsive design, and smooth interactions built
-                with modern technologies.
-              </p>
-            </div>
-
-            <div className="bg-gray-50 p-8 rounded-xl shadow-sm">
-              <h3 className="text-xl font-semibold mb-3">Secure & Reliable</h3>
-              <p className="text-gray-600">
-                We prioritize data security and scalability to ensure a safe
-                experience for all users.
-              </p>
-            </div>
-
-            <div className="bg-gray-50 p-8 rounded-xl shadow-sm">
-              <h3 className="text-xl font-semibold mb-3">Career Focused</h3>
-              <p className="text-gray-600">
-                Everything is designed to help users grow professionally and
-                present themselves better.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ================= TRUST SECTION ================= */}
-      <section className="bg-gray-100 py-20">
-        <div className="max-w-6xl mx-auto px-6 text-center">
-          <h2 className="text-3xl font-bold mb-6">
-            Hiring Open Across These Technical Fields
-          </h2>
-
-          <p className="text-gray-600 max-w-3xl mx-auto mb-10">
-            Companies are actively hiring skilled professionals in these
-            technical areas and much more. Explore opportunities and prepare yourself for
-            roles in high-demand domains.
-          </p>
-
-          <div className="flex flex-wrap justify-center gap-6">
-            {TECH_SKILLS.map((skill) => (
-              <span
-                key={skill}
-                className="bg-white px-6 py-3 rounded-full shadow text-sm"
+            <div className="flex justify-center gap-4 mt-6">
+              <a
+                href="/register"
+                className="bg-indigo-600 text-white px-8 py-3 rounded-md font-medium hover:bg-indigo-700 transition-colors"
               >
-                {skill}
-              </span>
-            ))}
+                Get started
+              </a>
+              <a
+                href="#about"
+                className="border border-slate-300 px-8 py-3 rounded-md font-medium hover:bg-slate-100 transition-colors"
+              >
+                Learn more
+              </a>
+
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* ================= CTA ================= */}
-      <section className="bg-blue-600 py-24 text-white">
-        <div className="max-w-6xl mx-auto px-6 text-center flex flex-col gap-6">
-          <h2 className="text-3xl sm:text-4xl font-bold">
-            Your Career Platform Is Coming Soon
-          </h2>
+        {/* ================= ABOUT PLATFORM ================= */}
+        <section id="about" className="bg-white py-20">
+          <div className="max-w-6xl mx-auto px-6 grid grid-cols-1 sm:grid-cols-2 gap-12 items-center">
+            <div className="flex flex-col gap-4">
+              <h2 className="text-3xl font-bold text-slate-900">
+                Built for job seekers and employers
+              </h2>
+              <p className="text-slate-600">
+                Our platform is designed to simplify the hiring process. Whether
+                you're a student, a professional, or a company, everything is
+                built to be easy, fast, and reliable.
+              </p>
+              <p className="text-slate-600">
+                From profile creation to resume management, we focus on
+                delivering a clean, efficient experience on both sides of the
+                hire.
+              </p>
+            </div>
 
-          <p className="text-blue-100 max-w-2xl mx-auto">
-            Create your account today and be ready when new features and
-            opportunities are launched.
-          </p>
-
-          <div className="flex justify-center gap-4">
-            <button className="bg-white text-blue-600 px-8 py-3 rounded-md font-semibold hover:bg-gray-100">
-              Create Account
-            </button>
-            <button className="border border-white px-8 py-3 rounded-md hover:bg-blue-700">
-              Contact Us
-            </button>
+            <div className="bg-slate-50 border border-slate-100 rounded-xl p-10">
+              <ul className="flex flex-col gap-4 text-slate-700">
+                <li className="flex items-center gap-3">
+                  <span className="w-2 h-2 bg-indigo-600 rounded-full shrink-0"></span>
+                  Secure user profiles
+                </li>
+                <li className="flex items-center gap-3">
+                  <span className="w-2 h-2 bg-indigo-600 rounded-full shrink-0"></span>
+                  Resume upload and management
+                </li>
+                <li className="flex items-center gap-3">
+                  <span className="w-2 h-2 bg-indigo-600 rounded-full shrink-0"></span>
+                  Company dashboards
+                </li>
+                <li className="flex items-center gap-3">
+                  <span className="w-2 h-2 bg-indigo-600 rounded-full shrink-0"></span>
+                  Scalable, modern architecture
+                </li>
+              </ul>
+            </div>
           </div>
-        </div>
-      </section>
-    </div>
+        </section>
+
+        {/* ================= FEATURES ================= */}
+        <section className="bg-slate-50 py-24">
+          <div className="max-w-6xl mx-auto px-6">
+            <h2 className="text-3xl font-bold text-center text-slate-900 mb-14">
+              Platform highlights
+            </h2>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+              <div className="bg-white border-l-2 border-indigo-600 p-8 rounded-r-xl">
+                <h3 className="text-xl font-semibold text-slate-900 mb-3">
+                  Modern UI and UX
+                </h3>
+                <p className="text-slate-600">
+                  Clean layouts, responsive design, and smooth interactions
+                  built with modern technologies.
+                </p>
+              </div>
+
+              <div className="bg-white border-l-2 border-indigo-600 p-8 rounded-r-xl">
+                <h3 className="text-xl font-semibold text-slate-900 mb-3">
+                  Secure and reliable
+                </h3>
+                <p className="text-slate-600">
+                  We prioritize data security and scalability to keep every
+                  user's experience safe.
+                </p>
+              </div>
+
+              <div className="bg-white border-l-2 border-indigo-600 p-8 rounded-r-xl">
+                <h3 className="text-xl font-semibold text-slate-900 mb-3">
+                  Career focused
+                </h3>
+                <p className="text-slate-600">
+                  Everything is designed to help users grow professionally and
+                  present themselves better.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ================= HIRING FIELDS ================= */}
+        <section id="fields" className="bg-white py-20">
+          <div className="max-w-6xl mx-auto px-6 text-center">
+            <h2 className="text-3xl font-bold text-slate-900 mb-6">
+              Hiring open across these technical fields
+            </h2>
+
+            <p className="text-slate-600 max-w-3xl mx-auto mb-10">
+              Companies are actively hiring skilled professionals in these
+              technical areas and much more. Explore opportunities and prepare
+              yourself for roles in high-demand domains.
+            </p>
+
+            <div className="flex flex-wrap justify-center gap-3">
+              {TECH_SKILLS.map((skill) => (
+                <span
+                  key={skill}
+                  className="bg-slate-50 border border-slate-200 text-slate-700 px-5 py-2.5 rounded-full text-sm font-medium"
+                >
+                  {skill}
+                </span>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ================= CTA ================= */}
+        <section className="bg-indigo-600 py-24">
+          <div className="max-w-6xl mx-auto px-6 text-center flex flex-col gap-6">
+            <h2 className="text-3xl sm:text-4xl font-bold text-white">
+              Your career platform is coming soon
+            </h2>
+
+            <p className="text-indigo-100 max-w-2xl mx-auto">
+              Create your account today and be ready when new features and
+              opportunities launch.
+            </p>
+
+            <div className="flex justify-center gap-4">
+              <a
+                href="/register"
+                className="bg-white text-indigo-600 px-8 py-3 rounded-md font-semibold hover:bg-indigo-50 transition-colors"
+              >
+                Create account
+              </a>
+              <a
+                href="#about"
+                className="border border-white text-white px-8 py-3 rounded-md hover:bg-indigo-700 transition-colors"
+              >
+                Contact us
+              </a>
+            </div>
+          </div>
+        </section>
+      </div>
+      <Footer />
+    </>
   );
 };
 

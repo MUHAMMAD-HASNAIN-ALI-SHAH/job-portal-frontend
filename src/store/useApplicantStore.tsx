@@ -5,18 +5,18 @@ import { toast } from "react-toastify";
 
 interface ApplicantState {
   // States
-  applicant: Applicant | null; // to store applicant details
-  resume: Resume | null; // to store applicant resume details
+  applicant: Applicant | null;
+  resume: Resume | null;
 
   // loaders
-  getApplicantDetailsLoader: boolean; // to track loading state while fetching applicant details
-  uploadResumeLoader: boolean; // to track loading state while uploading resume
-  getResumeLoader: boolean; // to track loading state while fetching resume
+  getApplicantDetailsLoader: boolean;
+  uploadResumeLoader: boolean;
+  getResumeLoader: boolean;
 
   // Methods
-  getApplicantDetails: () => Promise<void>; // to update applicant details
-  uploadResume: (base64File: string, fileName: string) => Promise<void>; // to upload resume
-  getUserResume: () => Promise<void>; // to fetch user resume
+  getApplicantDetails: () => Promise<void>;
+  uploadResume: (base64File: string, fileName: string) => Promise<void>;
+  getUserResume: () => Promise<void>;
 }
 
 const useApplicantStore = create<ApplicantState>((set) => ({

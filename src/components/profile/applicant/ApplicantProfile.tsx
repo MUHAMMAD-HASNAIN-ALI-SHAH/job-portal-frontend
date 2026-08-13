@@ -1,6 +1,6 @@
-import useApplicantStore from "../../store/useApplicantStore";
-import useAuthStore from "../../store/useAuthStore";
-import ResumeSection from "./applicant/ResumeSection";
+import useApplicantStore from "../../../store/useApplicantStore";
+import useAuthStore from "../../../store/useAuthStore";
+import ResumeSection from "./ResumeSection";
 
 const ApplicantProfile = () => {
   const { user } = useAuthStore();

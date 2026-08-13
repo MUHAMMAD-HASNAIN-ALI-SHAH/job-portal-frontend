@@ -1,15 +1,15 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
-import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
 import useAuthStore from "./store/useAuthStore";
 import { useEffect } from "react";
 import Register from "./pages/Register";
-import Profile from "./pages/Profile";
+import EmailVerification from "./pages/EmailVerification";
+import { Loader2 } from "lucide-react";
+import Dashboard from "./pages/Dashboard";
 
 function App() {
-  const { verify, isAuthenticated, isAuthenticatedLoading } = useAuthStore();
+  const { verify, isAuthenticated, isAuthenticatedLoading, user } = useAuthStore();
 
   useEffect(() => {
     verify();
@@ -19,16 +19,16 @@ function App() {
     <div className="w-full">
       {isAuthenticatedLoading ? (
         <div className="min-h-screen flex items-center justify-center">
-          <div className="loader ease-linear rounded-full border-8 border-t-8 border-blue-500 h-10 w-10"></div>
+          <Loader2 className="w-12 h-12 animate-spin text-indigo-600" />
         </div>
       ) : (
         <>
-          <Navbar />
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/verify-email" element={<EmailVerification />} />
             <Route
-              path="/profile"
-              element={isAuthenticated ? <Profile /> : <Navigate to="/login" />}
+              path="/dashboard"
+              element={!isAuthenticated ? <Navigate to="/" /> : user?.role === "company" ? <Dashboard /> : <Navigate to="/" />}
             />
             <Route
               path="/register"
@@ -39,7 +39,6 @@ function App() {
               element={isAuthenticated ? <Navigate to="/" /> : <Login />}
             />
           </Routes>
-          <Footer />
         </>
       )}
     </div>
