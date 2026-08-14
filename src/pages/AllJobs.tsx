@@ -11,12 +11,15 @@ const AllJobs = () => {
   const { jobs, getAllJobs, getJobsLoader } = useJobStore();
   const [query, setQuery] = useState("");
   const [selectedCity, setSelectedCity] = useState("All locations");
+
   const handleSearch = () => {
     getAllJobs(query, selectedCity);
   };
 
   useEffect(() => {
-    getAllJobs(query, selectedCity);
+    if (jobs.length === 0) {
+      getAllJobs(query, selectedCity);
+    }
   }, [getAllJobs]);
 
   return (
@@ -24,12 +27,12 @@ const AllJobs = () => {
       <Navbar />
       <SearchBar
         query={query}
-        selectedCity={selectedCity}
         setQuery={setQuery}
+        selectedCity={selectedCity}
         setSelectedCity={setSelectedCity}
         handleSearch={handleSearch}
       />
-      <div className="w-full max-w-7xl mx-auto px-3 py-4 sm:py-6">
+      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 py-4 sm:py-6">
         <div className="mb-4 sm:mb-6">
           <h1 className="text-xl sm:text-2xl font-bold text-slate-900">All Jobs</h1>
           <p className="text-sm text-slate-500 mt-1">

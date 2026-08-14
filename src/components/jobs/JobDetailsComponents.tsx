@@ -2,9 +2,10 @@ import { useNavigate } from "react-router-dom";
 import type { Job } from "../../interfaces";
 import useAuthStore from "../../store/useAuthStore";
 import { toast } from "react-toastify";
+import { CheckCircle2 } from "lucide-react";
 
 export const JobDetailsSkeleton = () => (
-    <div className="max-w-5xl mx-auto py-8 px-4 animate-pulse">
+    <div className="max-w-7xl mx-auto py-8 px-4 sm:px-8 animate-pulse">
         <div className="bg-white rounded-2xl border shadow-sm overflow-hidden">
             {/* Header */}
             <div className="p-8 border-b">
@@ -71,13 +72,13 @@ export const JobDetailsSkeleton = () => (
     </div>
 );
 
-export const JobDetailsCard = ({ job }: { job: Job }) => {
+export const JobDetailsCard = ({ job, alreadyApplied }: { job: Job, alreadyApplied: boolean }) => {
     const navigate = useNavigate();
-    const {isAuthenticated} = useAuthStore();
+    const { isAuthenticated } = useAuthStore();
 
     const handleApply = () => {
         if (!job) return;
-        if(!isAuthenticated) {
+        if (!isAuthenticated) {
             toast.error("Please login to apply for this job.");
             return;
         }
@@ -86,6 +87,22 @@ export const JobDetailsCard = ({ job }: { job: Job }) => {
 
     return (
         <div className="bg-white rounded-2xl border shadow-sm overflow-hidden">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
+                <div className="flex items-center justify-between">
+                    {
+                        alreadyApplied && (
+                            <div className="flex items-center gap-3 w-full rounded-xl border border-green-100 bg-green-50/60 px-4 py-3">
+                                <div className="h-10 w-10 rounded-full bg-green-100 text-green-700 flex items-center justify-center shrink-0">
+                                    <CheckCircle2 className="h-5 w-5" />
+                                </div>
+                                <p className="text-green-700 text-sm font-medium">
+                                    You have already applied for this job.
+                                </p>
+                            </div>
+                        )
+                    }
+                </div>
+            </div>
             {/* Header */}
             <div className="p-8 border-b">
                 <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6">
@@ -111,7 +128,11 @@ export const JobDetailsCard = ({ job }: { job: Job }) => {
 
                     <button
                         onClick={handleApply}
-                        className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-lg font-medium transition"
+                        disabled={alreadyApplied}
+                        className={`${alreadyApplied
+                            ? "bg-gray-400 cursor-not-allowed"
+                            : "bg-indigo-600 hover:bg-indigo-700"
+                            } text-white px-6 py-3 rounded-lg font-medium transition`}
                     >
                         Apply Now
                     </button>
@@ -234,7 +255,11 @@ export const JobDetailsCard = ({ job }: { job: Job }) => {
                 <div className="pt-4">
                     <button
                         onClick={handleApply}
-                        className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-lg font-medium transition"
+                        disabled={alreadyApplied}
+                        className={`${alreadyApplied
+                            ? "bg-gray-400 cursor-not-allowed"
+                            : "bg-indigo-600 hover:bg-indigo-700"
+                            } w-full text-white py-3 rounded-lg font-medium transition`}
                     >
                         Apply For This Job
                     </button>

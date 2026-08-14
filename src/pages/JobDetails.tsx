@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axiosInstance from "../lib/axios";
 import type { Job } from "../interfaces";
-import { JobDetailsCard, JobDetailsSkeleton } from "../components/jobs/JobDetailsItems";
+import { JobDetailsCard, JobDetailsSkeleton } from "../components/jobs/JobDetailsComponents";
 import { ArrowLeft, SearchX } from "lucide-react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
@@ -11,6 +11,7 @@ const JobDetails = () => {
   const { id } = useParams();
   const [job, setJob] = useState<Job | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [alreadyApplied, setAlreadyApplied] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
@@ -23,7 +24,8 @@ const JobDetails = () => {
 
       try {
         const res = await axiosInstance.get(`/api/v4/job/${id}`);
-        setJob(res.data);
+        setJob(res.data.job);
+        setAlreadyApplied(res.data.applied);
       } catch (err: any) {
         setError(err?.response?.data?.msg || "Failed to load job details.");
       } finally {
@@ -66,7 +68,7 @@ const JobDetails = () => {
     <>
       <Navbar />
 
-      <div className="max-w-7xl mx-auto py-8 px-4">
+      <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6">
         <button
           onClick={() => navigate("/all-jobs")}
           className="inline-flex items-center gap-2 mb-4 text-sm font-medium text-gray-600 hover:text-indigo-600 transition"
@@ -74,7 +76,7 @@ const JobDetails = () => {
           <ArrowLeft size={18} />
           Back to Jobs
         </button>
-        <JobDetailsCard job={job} />
+        <JobDetailsCard job={job} alreadyApplied={alreadyApplied} />
       </div>
       <Footer />
     </>

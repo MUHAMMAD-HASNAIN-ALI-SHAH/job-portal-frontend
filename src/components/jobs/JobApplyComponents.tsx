@@ -1,4 +1,4 @@
-import type { FormEvent } from "react";
+import { type FormEvent } from "react";
 import { SearchX, UploadCloud, CheckCircle2 } from "lucide-react";
 import type { Job } from "../../interfaces";
 import Navbar from "../Navbar";
@@ -16,7 +16,7 @@ export interface ApplyFormErrors {
 export const JobApplySkeleton = () => (
   <>
     <Navbar />
-    <div className="max-w-4xl mx-auto py-8 px-4 animate-pulse">
+    <div className="max-w-7xl mx-auto py-8 px-4 animate-pulse">
       <div className="h-4 w-28 bg-slate-200 rounded mb-4" />
       <div className="bg-white rounded-2xl border shadow-sm p-8 space-y-6">
         <div className="flex items-center gap-4">
@@ -40,7 +40,7 @@ export const JobApplySkeleton = () => (
 export const JobApplyError = ({ error }: { error: string | null }) => (
   <>
     <Navbar />
-    <div className="max-w-5xl mx-auto py-16 px-4">
+    <div className="max-w-7xl mx-auto py-16 px-4">
       <div className="bg-white rounded-2xl border shadow-sm p-12 text-center flex flex-col items-center">
         <div className="h-16 w-16 rounded-full bg-red-50 flex items-center justify-center mb-5">
           <SearchX className="h-8 w-8 text-red-500" />
@@ -74,7 +74,7 @@ export const JobApplySuccess = ({
 }) => (
   <>
     <Navbar />
-    <div className="max-w-5xl mx-auto py-16 px-4">
+    <div className="max-w-7xl mx-auto py-16 px-4">
       <div className="bg-white rounded-2xl border shadow-sm p-12 text-center flex flex-col items-center">
         <div className="h-16 w-16 rounded-full bg-green-50 flex items-center justify-center mb-5">
           <CheckCircle2 className="h-8 w-8 text-green-600" />
@@ -122,6 +122,28 @@ export const JobSummaryHeader = ({ job }: { job: Job }) => (
   </div>
 );
 
+export const AlreadyResumeUi = () => {
+  const { resume } = useApplicantStore();
+
+  if (!resume) return null;
+
+  return (
+    <div className="bg-white border-b">
+      <div className="max-w-7xl mx-auto px-6 sm:px-10 py-4">
+        <div className="flex items-center gap-3 w-full rounded-xl border border-green-100 bg-green-50/60 px-4 py-3">
+          <div className="h-10 w-10 rounded-full bg-green-100 text-green-700 flex items-center justify-center shrink-0">
+            <CheckCircle2 className="h-5 w-5" />
+          </div>
+          <div className="min-w-0">
+            <p className="text-sm font-semibold text-slate-800 truncate">Resume already uploaded</p>
+            <p className="text-xs text-slate-500 mt-0.5">You can replace it below if you'd like to use a different one.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 interface ApplyFormProps {
   coverLetter: string;
   setCoverLetter: (value: string) => void;
@@ -137,28 +159,6 @@ interface ApplyFormProps {
   onSubmit: (e: FormEvent) => void;
 }
 
-export const AlreadyResumeUi = () => {
-  const { resume } = useApplicantStore();
-
-  if (!resume) return null;
-
-  return (
-    <div className="bg-white border-b">
-      <div className="max-w-5xl mx-auto px-6 sm:px-10 py-4">
-        <div className="flex items-center gap-3 w-full rounded-xl border border-green-100 bg-green-50/60 px-4 py-3">
-          <div className="h-10 w-10 rounded-full bg-green-100 text-green-700 flex items-center justify-center shrink-0">
-            <CheckCircle2 className="h-5 w-5" />
-          </div>
-          <div className="min-w-0">
-            <p className="text-sm font-semibold text-slate-800 truncate">Resume already uploaded</p>
-            <p className="text-xs text-slate-500 mt-0.5">You can replace it below if you'd like to use a different one.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
 export const ApplyForm = ({
   coverLetter,
   setCoverLetter,
@@ -173,6 +173,7 @@ export const ApplyForm = ({
   isSubmitting,
   onSubmit,
 }: ApplyFormProps) => {
+
   return (
     <form onSubmit={onSubmit} noValidate className="p-6 sm:p-8 space-y-5">
       {errors.submitError && (

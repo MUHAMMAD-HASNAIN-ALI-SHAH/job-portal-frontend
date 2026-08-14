@@ -30,7 +30,10 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/all-jobs" element={<AllJobs />} />
-            <Route path="/job/:id" element={<JobDetails />} />
+            <Route
+              path="/job/:id"
+              element={!isAuthenticated ? <Navigate to="/" /> : user?.role === "applicant" ? <JobDetails /> : <Navigate to="/all-jobs" />}
+            />
             <Route path="/verify-email" element={<EmailVerification />} />
             <Route
               path="/job/:id/apply"
