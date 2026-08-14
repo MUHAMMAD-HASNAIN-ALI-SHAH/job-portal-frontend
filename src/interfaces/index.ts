@@ -4,14 +4,28 @@ export interface User {
   role: string;
 }
 
+export interface ApplicantEducation {
+  degree: string;
+  institution: string;
+  yearOfCompletion: number;
+}
+
 export interface Applicant {
+  _id: string;
+  userId: string;
   fullName: string;
-  phone: string;
-  location: string;
-  resume: string;
-  profilePicture: string;
-  skills: string[];
+  headLine: string;
   bio: string;
+  yearsOfExperience: number;
+  skills: string[];
+  education: ApplicantEducation[];
+  preferredJobTypes: string[];
+  expectedSalary: number;
+  noticePeriod: number;
+  profileCompleteness: number;
+  savedJobs: string[];
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface CompanyInterface {
@@ -45,7 +59,7 @@ export interface JobForm {
 
 export interface Job {
   _id: string;
-  company: string;
+  company: CompanyInterface;
   title: string;
   description: string;
   requirements: string[];
@@ -95,3 +109,8 @@ export interface DashboardCandidate {
 
 export type ExperienceLevel = "Internship" | "Entry" | "Mid" | "Senior" | "Lead";
 export type EmploymentType = "Full-time" | "Part-time" | "Contract" | "Freelance" | "Temporary";
+
+export interface ResumeData {
+  resumeUrl: string;
+  fileName: string;
+}

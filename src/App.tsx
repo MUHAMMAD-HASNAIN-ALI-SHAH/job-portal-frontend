@@ -7,6 +7,10 @@ import Register from "./pages/Register";
 import EmailVerification from "./pages/EmailVerification";
 import { Loader2 } from "lucide-react";
 import Dashboard from "./pages/Dashboard";
+import Profile from "./pages/Profile";
+import AllJobs from "./pages/AllJobs";
+import JobDetails from "./pages/JobDetails";
+import JobApply from "./pages/JobApply";
 
 function App() {
   const { verify, isAuthenticated, isAuthenticatedLoading, user } = useAuthStore();
@@ -25,7 +29,17 @@ function App() {
         <>
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/all-jobs" element={<AllJobs />} />
+            <Route path="/job/:id" element={<JobDetails />} />
             <Route path="/verify-email" element={<EmailVerification />} />
+            <Route
+              path="/job/:id/apply"
+              element={!isAuthenticated ? <Navigate to="/" /> : user?.role === "applicant" ? <JobApply /> : <Navigate to="/all-jobs" />}
+            />
+            <Route
+              path="/profile"
+              element={!isAuthenticated ? <Navigate to="/" /> : user?.role === "applicant" ? <Profile /> : <Navigate to="/" />}
+            />
             <Route
               path="/dashboard"
               element={!isAuthenticated ? <Navigate to="/" /> : user?.role === "company" ? <Dashboard /> : <Navigate to="/" />}

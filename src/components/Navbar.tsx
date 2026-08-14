@@ -8,8 +8,13 @@ interface NavLink {
   label: string;
 }
 
-const LINKS: NavLink[] = [
+const COMPANY_LINKS: NavLink[] = [
   { to: "/dashboard", icon: "ri-dashboard-line", label: "Dashboard" },
+];
+
+const APPLICANT_LINKS: NavLink[] = [
+  { to: "/profile", icon: "ri-user-3-line", label: "Profile" },
+  { to: "/all-jobs", icon: "ri-user-3-line", label: "All Jobs" },
 ];
 
 const NavLinkItem = ({ to, icon, label, onClick }: NavLink & { onClick: () => void }) => (
@@ -65,12 +70,12 @@ const Navbar = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const links = LINKS;
+  const links = user?.role === "applicant" ? APPLICANT_LINKS : COMPANY_LINKS;
   const initial = user?.email?.charAt(0).toUpperCase() ?? "";
 
   return (
     <header className="w-full bg-white border-b border-slate-100 sticky top-0 z-40">
-      <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+      <div className="max-w-7xl mx-auto px-3 py-4 flex items-center justify-between">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2 text-slate-900 font-bold text-lg tracking-tight">
           <i className="ri-briefcase-line text-xl text-indigo-600" />

@@ -1,70 +1,94 @@
 import { create } from "zustand";
-import type { Applicant, Resume } from "../interfaces";
+import type { Applicant, ResumeData } from "../interfaces";
 import axiosInstance from "../lib/axios";
 import { toast } from "react-toastify";
+import readFileAsBase64 from "../lib/base64";
 
 interface ApplicantState {
   // States
   applicant: Applicant | null;
-  resume: Resume | null;
+  resume: ResumeData | null;
 
   // loaders
   getApplicantDetailsLoader: boolean;
-  uploadResumeLoader: boolean;
   getResumeLoader: boolean;
+  resumeUploadLoader: boolean;
 
   // Methods
   getApplicantDetails: () => Promise<void>;
-  uploadResume: (base64File: string, fileName: string) => Promise<void>;
+  updateApplicantDetails: (data: Partial<Applicant>) => Promise<void>;
   getUserResume: () => Promise<void>;
+  uploadResume: (file: File) => Promise<void>;
 }
 
 const useApplicantStore = create<ApplicantState>((set) => ({
   applicant: null,
   resume: null,
+
   getApplicantDetailsLoader: false,
-  uploadResumeLoader: false,
   getResumeLoader: false,
+  resumeUploadLoader: false,
+
   getApplicantDetails: async () => {
     try {
       set({ getApplicantDetailsLoader: true });
-      const response = await axiosInstance.get("/api/v2/applicant");
-      set({ applicant: response.data.applicant });
+      const response = await axiosInstance.get("/api/v3/applicant");
+      set({ applicant: response.data });
       set({ getApplicantDetailsLoader: false });
-      await useApplicantStore.getState().getUserResume();
     } catch (error) {
       set({ getApplicantDetailsLoader: false });
       toast.error("Failed to fetch applicant details");
     }
   },
-  uploadResume: async (base64File, fileName) => {
+  updateApplicantDetails: async (data) => {
     try {
-      set({ uploadResumeLoader: true });
-      const resume = await axiosInstance.post("/api/v2/applicant/resume", {
-        base64: base64File,
-        fileName: fileName,
-      });
-      set({ resume: resume.data.resume });
-      set({ uploadResumeLoader: false });
-      toast.success("Resume uploaded successfully");
-    } catch (error) {
-      toast.error("Failed to upload resume");
-      set({ uploadResumeLoader: false });
+      set({ applicant: data as Applicant });
+    } catch (error: any) {
+      toast.error(error.response?.data?.msg || "Failed to update applicant details");
     }
   },
   getUserResume: async () => {
     try {
       set({ getResumeLoader: true });
-      const response = await axiosInstance.get("/api/v2/applicant/resume");
-      if(response.data.resume){
-      set({ resume: response.data.resume });
+      const res = await axiosInstance.get("/api/v5/resume");
+
+      if (res.data) {
+        set({
+          resume: {
+            resumeUrl: res.data.resumeUrl,
+            fileName: res.data.fileName || "resume.pdf",
+          }
+        });
       }
-      set({ getResumeLoader: false });
-    } catch (error) {
+    } catch (err: any) {
+      console.error("Failed to fetch resume:", err?.response?.data || err.message);
       toast.error("Failed to fetch resume");
+    } finally {
       set({ getResumeLoader: false });
     }
   },
+  uploadResume: async (file) => {
+    try {
+      const base64 = await readFileAsBase64(file);
+      const res = await axiosInstance.post("/api/v5/resume", {
+        resumeBase64: base64,
+        fileName: file.name,
+      });
+
+      set({
+        resume: {
+          resumeUrl: res.data.resumeUrl,
+          fileName: res.data.fileName || file.name,
+        }
+      });
+
+      toast.success("Resume uploaded successfully");
+
+    } catch (err: any) {
+      console.error("Resume upload failed:", err?.response?.data || err.message);
+      toast.error(err?.response?.data?.msg || "Failed to upload resume");
+    }
+  }
 }));
 
 export default useApplicantStore;

@@ -29,7 +29,6 @@ const EmailVerification = () => {
       .then(() => {
         setStatus("success");
         setMessage("Email verified successfully!");
-        toast.success("Email verified successfully!");
 
         setTimeout(() => {
           navigate("/login");

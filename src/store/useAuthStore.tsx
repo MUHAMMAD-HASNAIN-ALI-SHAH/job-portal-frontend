@@ -31,6 +31,7 @@ const useAuthStore = create<AuthState>((set) => ({
       set({ user: response.data.user, isAuthenticated: true });
       if (response.data.user.role === "applicant") {
         useApplicantStore.getState().getApplicantDetails();
+        useApplicantStore.getState().getUserResume();
       }
       if (response.data.user.role === "company") {
         useCompanyStore.getState().getCompanyDetails();
@@ -63,6 +64,7 @@ const useAuthStore = create<AuthState>((set) => ({
       });
       if (response.data.user.role === "applicant") {
         useApplicantStore.getState().getApplicantDetails();
+        useApplicantStore.getState().getUserResume();
       }
       if (response.data.user.role === "company") {
         useCompanyStore.getState().getCompanyDetails();
