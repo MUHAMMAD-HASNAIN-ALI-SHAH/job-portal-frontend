@@ -11,6 +11,7 @@ import Profile from "./pages/Profile";
 import AllJobs from "./pages/AllJobs";
 import JobDetails from "./pages/JobDetails";
 import JobApply from "./pages/JobApply";
+import AppliedJobs from "./pages/AppliedJobs";
 
 function App() {
   const { verify, isAuthenticated, isAuthenticatedLoading, user } = useAuthStore();
@@ -33,6 +34,10 @@ function App() {
             <Route
               path="/job/:id"
               element={!isAuthenticated ? <Navigate to="/" /> : user?.role === "applicant" ? <JobDetails /> : <Navigate to="/all-jobs" />}
+            />
+            <Route
+              path="/my-applications"
+              element={!isAuthenticated ? <Navigate to="/" /> : user?.role === "applicant" ? <AppliedJobs /> : <Navigate to="/all-jobs" />}
             />
             <Route path="/verify-email" element={<EmailVerification />} />
             <Route

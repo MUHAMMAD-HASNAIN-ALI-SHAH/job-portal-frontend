@@ -59,7 +59,7 @@ export interface JobForm {
 
 export interface Job {
   _id: string;
-  company: CompanyInterface;
+  companyId: CompanyInterface;
   title: string;
   description: string;
   requirements: string[];
@@ -113,4 +113,22 @@ export type EmploymentType = "Full-time" | "Part-time" | "Contract" | "Freelance
 export interface ResumeData {
   resumeUrl: string;
   fileName: string;
+}
+
+export interface Application {
+  _id: string;
+  applicantId: string;
+  jobId: string;
+  status: "applied" | "shortlisted" | "rejected" | "hired";
+  resumeId: string;
+  coverLetter: string;
+  noticePeriod: number;
+  expectedSalary: number;
+  interviewDate: string | null;
+  interviewTime: string | null;
+  interviewMode: "in-person" | "online" | "phone" | null;
+  zoomLink: string | null;
+  interviewLocation: string | null;
+  createdAt: string;
+  updatedAt: string;
 }

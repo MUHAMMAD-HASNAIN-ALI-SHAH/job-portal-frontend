@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import type { Applicant, ResumeData } from "../interfaces";
+import type { Applicant, Application, ResumeData } from "../interfaces";
 import axiosInstance from "../lib/axios";
 import { toast } from "react-toastify";
 import readFileAsBase64 from "../lib/base64";
@@ -8,26 +8,31 @@ interface ApplicantState {
   // States
   applicant: Applicant | null;
   resume: ResumeData | null;
+  applications: Application[];
 
   // loaders
   getApplicantDetailsLoader: boolean;
   getResumeLoader: boolean;
   resumeUploadLoader: boolean;
+  getApplicationsLoader: boolean;
 
   // Methods
   getApplicantDetails: () => Promise<void>;
   updateApplicantDetails: (data: Partial<Applicant>) => Promise<void>;
   getUserResume: () => Promise<void>;
   uploadResume: (file: File) => Promise<void>;
+  getMyApplications: () => Promise<void>;
 }
 
 const useApplicantStore = create<ApplicantState>((set) => ({
   applicant: null,
   resume: null,
+  applications: [],
 
   getApplicantDetailsLoader: false,
   getResumeLoader: false,
   resumeUploadLoader: false,
+  getApplicationsLoader: false,
 
   getApplicantDetails: async () => {
     try {
@@ -87,6 +92,17 @@ const useApplicantStore = create<ApplicantState>((set) => ({
     } catch (err: any) {
       console.error("Resume upload failed:", err?.response?.data || err.message);
       toast.error(err?.response?.data?.msg || "Failed to upload resume");
+    }
+  },
+  getMyApplications: async () => {
+    try {
+      set({ getApplicationsLoader: true });
+      const response = await axiosInstance.get("/api/v6/application/applicant");
+      set({ applications: response.data });
+    } catch (error) {
+      toast.error("Failed to fetch applications");
+    } finally {
+      set({ getApplicationsLoader: false });
     }
   }
 }));

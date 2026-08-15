@@ -2,12 +2,12 @@ import { create } from "zustand";
 
 interface NavigationState {
     // Menu
-    sidebarMenu: "dashboard" | "add-job" | "my-jobs" | "profile";
+    sidebarMenu: "dashboard" | "add-job" | "my-jobs" | "profile" | "applications";
     editJobId: string | null;
     editCompanyProfile: boolean;
 
     // Setters
-    setSidebarMenu: (sidebarMenu: "dashboard" | "add-job" | "my-jobs") => void;
+    setSidebarMenu: (sidebarMenu: "dashboard" | "add-job" | "my-jobs" | "profile" | "applications") => void;
     setEditJobId: (editJobId: string | null) => void;
     setEditCompanyProfile: (editCompanyProfile: boolean) => void;
 }

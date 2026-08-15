@@ -14,7 +14,7 @@ const timeAgo = (dateString: string) => {
 };
 
 const JobCard = ({ job }: { job: Job }) => {
-    const company = job.company as CompanyInterface;
+    const company = job.companyId as CompanyInterface;
     const navigate = useNavigate();
 
     return (

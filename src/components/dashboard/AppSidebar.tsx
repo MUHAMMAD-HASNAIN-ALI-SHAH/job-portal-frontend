@@ -39,6 +39,11 @@ const menuItems = [
     navigationPath: "my-jobs",
     icon: Briefcase,
   },
+    {
+    name: "Applications",
+    navigationPath: "applications",
+    icon: FilePlus,
+  },
   {
     name: "My Profile",
     navigationPath: "profile",

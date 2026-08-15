@@ -14,7 +14,8 @@ const COMPANY_LINKS: NavLink[] = [
 
 const APPLICANT_LINKS: NavLink[] = [
   { to: "/profile", icon: "ri-user-3-line", label: "Profile" },
-  { to: "/all-jobs", icon: "ri-user-3-line", label: "All Jobs" },
+  { to: "/all-jobs", icon: "ri-briefcase-line", label: "All Jobs" },
+  { to: "/my-applications", icon: "ri-briefcase-line", label: "My Applications" },
 ];
 
 const NavLinkItem = ({ to, icon, label, onClick }: NavLink & { onClick: () => void }) => (

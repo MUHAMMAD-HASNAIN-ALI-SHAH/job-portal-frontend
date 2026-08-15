@@ -229,7 +229,7 @@ export const ApplyForm = ({
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="text-left">
           <label htmlFor="expectedSalary" className="block text-sm font-medium text-gray-700 mb-1">
-            Expected salary <span className="text-gray-400 font-normal">(optional)</span>
+            Expected salary (PKR)
           </label>
           <input
             id="expectedSalary"
@@ -251,7 +251,7 @@ export const ApplyForm = ({
 
         <div className="text-left">
           <label htmlFor="noticePeriod" className="block text-sm font-medium text-gray-700 mb-1">
-            Notice period (days) <span className="text-gray-400 font-normal">(optional)</span>
+            Notice period (days)
           </label>
           <input
             id="noticePeriod"
