@@ -1,132 +1,401 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
 import useAuthStore from "../store/useAuthStore";
+import {
+  Menu,
+  X,
+  ChevronDown,
+  Briefcase,
+  User,
+  LogOut,
+  LayoutDashboard,
+  FileText,
+  Building2,
+  Search,
+} from "lucide-react";
 
-interface NavLink {
+interface NavLinkType {
   to: string;
-  icon: string;
   label: string;
+  icon?: React.ReactNode;
 }
 
-const COMPANY_LINKS: NavLink[] = [
-  { to: "/dashboard", icon: "ri-dashboard-line", label: "Dashboard" },
+const COMPANY_LINKS: NavLinkType[] = [
+  {
+    to: "/dashboard",
+    label: "Dashboard",
+    icon: <LayoutDashboard size={16} />,
+  },
 ];
 
-const APPLICANT_LINKS: NavLink[] = [
-  { to: "/profile", icon: "ri-user-3-line", label: "Profile" },
-  { to: "/all-jobs", icon: "ri-briefcase-line", label: "All Jobs" },
-  { to: "/my-applications", icon: "ri-briefcase-line", label: "My Applications" },
+const APPLICANT_LINKS: NavLinkType[] = [
+  {
+    to: "/profile",
+    label: "Profile",
+    icon: <User size={16} />,
+  },
+  {
+    to: "/all-jobs",
+    label: "Browse Jobs",
+    icon: <Briefcase size={16} />,
+  },
+  {
+    to: "/my-applications",
+    label: "Applications",
+    icon: <FileText size={16} />,
+  },
 ];
-
-const NavLinkItem = ({ to, icon, label, onClick }: NavLink & { onClick: () => void }) => (
-  <Link
-    to={to}
-    onClick={onClick}
-    className="flex items-center gap-2 px-4 py-2.5 text-sm text-slate-700 hover:bg-indigo-50 hover:text-indigo-700 transition-colors"
-  >
-    <i className={icon} /> {label}
-  </Link>
-);
-
-const GuestLinks = () => (
-  <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-slate-600">
-    <a href="/#about" className="hover:text-slate-900 transition-colors">About</a>
-    <a href="/#fields" className="hover:text-slate-900 transition-colors">Hiring fields</a>
-    <a href="/all-jobs" className="hover:text-slate-900 transition-colors">Find jobs</a>
-  </nav>
-);
-
-const GuestButtons = () => (
-  <div className="flex items-center gap-3 md:gap-4">
-    <Link
-      to="/login"
-      className="hidden sm:block text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors"
-    >
-      Log in
-    </Link>
-    <Link
-      to="/register"
-      className="bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium px-4 py-2 rounded-md transition-colors"
-    >
-      Get started
-    </Link>
-  </div>
-);
 
 const Navbar = () => {
   const { user, onLogout } = useAuthStore();
-  const [open, setOpen] = useState(false);
+  const location = useLocation();
+
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const closeDropdown = () => setOpen(false);
+  const links =
+    user?.role === "applicant"
+      ? APPLICANT_LINKS
+      : COMPANY_LINKS;
 
-  // Close on outside click
+  const initial =
+    user?.email?.charAt(0)?.toUpperCase() || "U";
+
   useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
-        closeDropdown();
+    const handleClickOutside = (
+      event: MouseEvent
+    ) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(
+          event.target as Node
+        )
+      ) {
+        setDropdownOpen(false);
       }
     };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+
+    document.addEventListener(
+      "mousedown",
+      handleClickOutside
+    );
+
+    return () =>
+      document.removeEventListener(
+        "mousedown",
+        handleClickOutside
+      );
   }, []);
 
-  const links = user?.role === "applicant" ? APPLICANT_LINKS : COMPANY_LINKS;
-  const initial = user?.email?.charAt(0).toUpperCase() ?? "";
+  useEffect(() => {
+    setMobileMenuOpen(false);
+  }, [location.pathname]);
 
   return (
-    <header className="w-full bg-white border-b border-slate-100 sticky top-0 z-40">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
-        {/* Logo */}
-        <Link to="/" className="flex items-center gap-2 text-slate-900 font-bold text-lg tracking-tight">
-          <i className="ri-briefcase-line text-xl text-indigo-600" />
-          Job<span className="text-indigo-600">Stack</span>
-        </Link>
+    <>
+      <header className="sticky top-0 z-50 border-b border-slate-200/60 bg-white/90 backdrop-blur-xl">
+        <div className="max-w-7xl mx-auto h-16 px-4 sm:px-6 lg:px-8 flex items-center justify-between">
 
-        {/* Center links — guests only */}
-        {!user && <GuestLinks />}
+          {/* LOGO */}
+          <Link
+            to="/"
+            className="flex items-center gap-3 shrink-0"
+          >
+            <div className="h-10 w-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center shadow-lg">
+              <Briefcase size={18} />
+            </div>
 
-        {/* Authenticated */}
-        {user && (
-          <div className="relative" ref={dropdownRef}>
-            <button
-              onClick={() => setOpen(!open)}
-              className="flex items-center gap-2 pl-2 pr-3 py-1.5 cursor-pointer rounded-full border border-slate-200 hover:border-slate-300 hover:bg-slate-50 transition-colors"
-            >
-              <span className="h-7 w-7 rounded-full bg-indigo-50 text-indigo-700 text-sm font-semibold flex items-center justify-center">
-                {initial || <i className="ri-user-3-fill text-base" />}
-              </span>
-              <i className={`ri-arrow-down-s-line text-slate-500 transition-transform ${open ? "rotate-180" : ""}`} />
-            </button>
+            <div>
+              <h2 className="font-bold text-lg text-slate-900 leading-none">
+                JobStack
+              </h2>
+              <p className="text-[10px] text-slate-500">
+                Career Platform
+              </p>
+            </div>
+          </Link>
 
-            {open && (
-              <div className="absolute right-0 mt-2 w-52 bg-white rounded-xl border border-slate-100 shadow-lg overflow-hidden z-50">
-                <div className="px-4 py-3 border-b border-slate-100">
-                  <p className="text-sm font-medium text-slate-900 truncate">{user?.email}</p>
-                  <p className="text-xs text-slate-400 capitalize mt-0.5">{user?.role}</p>
-                </div>
-                <div className="py-1">
-                  {links.map((link) => (
-                    <NavLinkItem key={link.to} {...link} onClick={closeDropdown} />
-                  ))}
-                </div>
-                <div className="border-t border-slate-100 py-1">
-                  <button
-                    onClick={onLogout}
-                    className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-colors"
-                  >
-                    <i className="ri-logout-box-line" /> Logout
-                  </button>
-                </div>
+          {/* CENTER NAVIGATION */}
+          {!user && (
+            <nav className="hidden lg:flex items-center gap-8">
+              <a
+                href="/#about"
+                className="text-sm font-medium text-slate-600 hover:text-indigo-600 transition"
+              >
+                About
+              </a>
+
+              <a
+                href="/#features"
+                className="text-sm font-medium text-slate-600 hover:text-indigo-600 transition"
+              >
+                Features
+              </a>
+
+              <a
+                href="/#fields"
+                className="text-sm font-medium text-slate-600 hover:text-indigo-600 transition"
+              >
+                Skills
+              </a>
+
+              <Link
+                to="/all-jobs"
+                className={`text-sm font-medium transition ${
+                  location.pathname === "/all-jobs"
+                    ? "text-indigo-600"
+                    : "text-slate-600 hover:text-indigo-600"
+                }`}
+              >
+                Jobs
+              </Link>
+
+              <a
+                href="/#companies"
+                className="text-sm font-medium text-slate-600 hover:text-indigo-600 transition"
+              >
+                Companies
+              </a>
+
+              <a
+                href="/#contact"
+                className="text-sm font-medium text-slate-600 hover:text-indigo-600 transition"
+              >
+                Contact
+              </a>
+            </nav>
+          )}
+
+          {/* USER QUICK LINKS */}
+          {user?.role === "applicant" && (
+            <div className="hidden lg:flex items-center gap-2">
+              <Link
+                to="/all-jobs"
+                className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-100"
+              >
+                <Search size={15} />
+                Browse Jobs
+              </Link>
+
+              <Link
+                to="/my-applications"
+                className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-100"
+              >
+                <FileText size={15} />
+                Applications
+              </Link>
+            </div>
+          )}
+
+          {/* RIGHT SIDE */}
+          <div className="flex items-center gap-3">
+
+            {/* GUEST BUTTONS */}
+            {!user && (
+              <div className="hidden md:flex items-center gap-3">
+                <Link
+                  to="/login"
+                  className="text-sm font-medium text-slate-600 hover:text-slate-900"
+                >
+                  Login
+                </Link>
+
+                <Link
+                  to="/register"
+                  className="bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium px-5 py-2.5 rounded-xl transition"
+                >
+                  Get Started
+                </Link>
               </div>
             )}
-          </div>
-        )}
 
-        {/* Guest */}
-        {!user && <GuestButtons />}
-      </div>
-    </header>
+            {/* USER MENU */}
+            {user && (
+              <div
+                className="relative"
+                ref={dropdownRef}
+              >
+                <button
+                  onClick={() =>
+                    setDropdownOpen(
+                      !dropdownOpen
+                    )
+                  }
+                  className="flex items-center gap-2 border border-slate-200 rounded-full pl-1.5 pr-3 py-1.5 hover:bg-slate-50 transition"
+                >
+                  <div className="h-8 w-8 rounded-full bg-indigo-100 text-indigo-700 font-semibold flex items-center justify-center">
+                    {initial}
+                  </div>
+
+                  <ChevronDown
+                    size={16}
+                    className={`transition-transform ${
+                      dropdownOpen
+                        ? "rotate-180"
+                        : ""
+                    }`}
+                  />
+                </button>
+
+                {dropdownOpen && (
+                  <div className="absolute right-0 mt-3 w-64 bg-white rounded-2xl border border-slate-200 shadow-xl overflow-hidden">
+
+                    <div className="px-4 py-4 border-b border-slate-100">
+                      <p className="font-medium text-slate-900 truncate">
+                        {user.email}
+                      </p>
+
+                      <p className="text-xs text-slate-500 capitalize mt-1">
+                        {user.role}
+                      </p>
+                    </div>
+
+                    <div className="py-2">
+                      {links.map((link) => (
+                        <Link
+                          key={link.to}
+                          to={link.to}
+                          onClick={() =>
+                            setDropdownOpen(
+                              false
+                            )
+                          }
+                          className="flex items-center gap-3 px-4 py-3 text-sm text-slate-700 hover:bg-indigo-50 hover:text-indigo-700 transition"
+                        >
+                          {link.icon}
+                          {link.label}
+                        </Link>
+                      ))}
+                    </div>
+
+                    <div className="border-t border-slate-100 p-2">
+                      <button
+                        onClick={onLogout}
+                        className="w-full flex items-center gap-3 px-3 py-3 rounded-xl text-red-600 hover:bg-red-50 transition"
+                      >
+                        <LogOut size={16} />
+                        Logout
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* MOBILE MENU */}
+            <button
+              onClick={() =>
+                setMobileMenuOpen(
+                  !mobileMenuOpen
+                )
+              }
+              className="md:hidden h-10 w-10 flex items-center justify-center rounded-lg border border-slate-200"
+            >
+              {mobileMenuOpen ? (
+                <X size={20} />
+              ) : (
+                <Menu size={20} />
+              )}
+            </button>
+          </div>
+        </div>
+      </header>
+
+      {/* MOBILE DRAWER */}
+      {mobileMenuOpen && (
+        <div className="fixed inset-0 z-40 bg-black/40 md:hidden">
+          <div className="absolute right-0 top-0 h-full w-80 bg-white shadow-2xl">
+
+            <div className="p-5 border-b">
+              <h3 className="font-bold text-lg">
+                Menu
+              </h3>
+            </div>
+
+            <div className="p-4 space-y-2">
+
+              {!user ? (
+                <>
+                  <a
+                    href="/#about"
+                    className="block px-4 py-3 rounded-xl hover:bg-slate-100"
+                  >
+                    About
+                  </a>
+
+                  <a
+                    href="/#features"
+                    className="block px-4 py-3 rounded-xl hover:bg-slate-100"
+                  >
+                    Features
+                  </a>
+
+                  <a
+                    href="/#fields"
+                    className="block px-4 py-3 rounded-xl hover:bg-slate-100"
+                  >
+                    Skills
+                  </a>
+
+                  <a
+                    href="/#companies"
+                    className="block px-4 py-3 rounded-xl hover:bg-slate-100"
+                  >
+                    Companies
+                  </a>
+
+                  <Link
+                    to="/all-jobs"
+                    className="block px-4 py-3 rounded-xl hover:bg-slate-100"
+                  >
+                    Jobs
+                  </Link>
+
+                  <div className="pt-4 border-t">
+                    <Link
+                      to="/login"
+                      className="block text-center border border-slate-200 rounded-xl py-3"
+                    >
+                      Login
+                    </Link>
+
+                    <Link
+                      to="/register"
+                      className="block text-center bg-indigo-600 text-white rounded-xl py-3 mt-3"
+                    >
+                      Get Started
+                    </Link>
+                  </div>
+                </>
+              ) : (
+                <>
+                  {links.map((link) => (
+                    <Link
+                      key={link.to}
+                      to={link.to}
+                      className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-100"
+                    >
+                      {link.icon}
+                      {link.label}
+                    </Link>
+                  ))}
+
+                  <button
+                    onClick={onLogout}
+                    className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-red-600 hover:bg-red-50"
+                  >
+                    <LogOut size={16} />
+                    Logout
+                  </button>
+                </>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 

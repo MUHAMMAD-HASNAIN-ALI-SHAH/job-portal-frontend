@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import axiosInstance from "../lib/axios";
 import type { Job } from "../interfaces";
 import useApplicantStore from "../store/useApplicantStore";
-import type { ApplyFormErrors } from "../components/jobs/JobApplyComponents";
+import type { ApplyFormErrors } from "../components/jobs/ApplyJobComponents";
 
 const readFileAsBase64 = (file: File): Promise<string> => {
   return new Promise((resolve, reject) => {
@@ -88,12 +88,12 @@ export const useJobApply = () => {
       nextErrors.resume = "Please attach your resume.";
     }
 
-    if (expectedSalary && Number(expectedSalary) < 0) {
-      nextErrors.expectedSalary = "Expected salary can't be negative.";
+    if (expectedSalary && Number(expectedSalary) <= 0) {
+      nextErrors.expectedSalary = "Expected salary can't be negative and zero.";
     }
 
-    if (noticePeriod && Number(noticePeriod) < 0) {
-      nextErrors.noticePeriod = "Notice period can't be negative.";
+    if (noticePeriod && Number(noticePeriod) <= 0) {
+      nextErrors.noticePeriod = "Notice period can't be negative and zero.";
     }
 
     setErrors(nextErrors);

@@ -8,10 +8,10 @@ import {
   JobApplySkeleton,
   JobApplySuccess,
   JobSummaryHeader,
-} from "../components/jobs/JobApplyComponents";
+} from "../components/jobs/ApplyJobComponents";
 import { useJobApply } from "../hooks/useJobApply";
 
-const JobApply = () => {
+const ApplyJob = () => {
   const {
     job,
     isLoading,
@@ -80,4 +80,4 @@ const JobApply = () => {
   );
 };
 
-export default JobApply;
+export default ApplyJob;

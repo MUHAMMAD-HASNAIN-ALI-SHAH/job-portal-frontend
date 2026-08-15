@@ -1,5 +1,12 @@
 import { useRef, useState, type DragEvent } from "react";
-import { UploadCloud, FileText, Edit, Loader2, AlertCircle } from "lucide-react";
+import {
+    UploadCloud,
+    FileText,
+    Edit,
+    Loader2,
+    AlertCircle,
+    CheckCircle2,
+} from "lucide-react";
 import useApplicantStore from "../../store/useApplicantStore";
 
 const MAX_SIZE_MB = 1;
@@ -8,16 +15,25 @@ const ACCEPTED_MIME = ["application/pdf"];
 
 const ResumeUpload = () => {
     const inputRef = useRef<HTMLInputElement>(null);
+
     const [isDragging, setIsDragging] = useState(false);
     const [localError, setLocalError] = useState<string | null>(null);
-    const { getResumeLoader, resume, uploadResume, resumeUploadLoader } = useApplicantStore();
+
+    const {
+        getResumeLoader,
+        resume,
+        uploadResume,
+        resumeUploadLoader,
+    } = useApplicantStore();
 
     const validateAndUpload = (selected: File | null) => {
         if (!selected) return;
 
         const isValidType =
             ACCEPTED_MIME.includes(selected.type) ||
-            ACCEPTED_TYPES.some((ext) => selected.name.toLowerCase().endsWith(ext));
+            ACCEPTED_TYPES.some((ext) =>
+                selected.name.toLowerCase().endsWith(ext)
+            );
 
         if (!isValidType) {
             setLocalError("Only PDF files are allowed.");
@@ -29,18 +45,20 @@ const ResumeUpload = () => {
             return;
         }
 
-        console.log(resume ? "Replacing resume with new file:" : "Resume selected:", selected.name);
-
         setLocalError(null);
         uploadResume(selected);
     };
 
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleInputChange = (
+        e: React.ChangeEvent<HTMLInputElement>
+    ) => {
         validateAndUpload(e.target.files?.[0] ?? null);
         e.target.value = "";
     };
 
-    const handleDrop = (e: DragEvent<HTMLLabelElement>) => {
+    const handleDrop = (
+        e: DragEvent<HTMLLabelElement>
+    ) => {
         e.preventDefault();
         setIsDragging(false);
         validateAndUpload(e.dataTransfer.files?.[0] ?? null);
@@ -50,99 +68,185 @@ const ResumeUpload = () => {
 
     return (
         <div className="w-full">
-            <div className="w-full px-8 max-w-5xl mx-auto mb-10">
-                <div className="text-left">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Resume</label>
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
 
-                    {getResumeLoader ? (
-                        <div className="flex items-center gap-3 w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 animate-pulse">
-                            <div className="h-9 w-9 rounded-md bg-slate-200 shrink-0" />
-                            <div className="flex-1 space-y-1.5">
-                                <div className="h-3.5 w-1/3 bg-slate-200 rounded" />
-                                <div className="h-3 w-16 bg-slate-200 rounded" />
-                            </div>
-                        </div>
-                    ) : resume ? (
-                        <div
-                            className={`flex items-center justify-between gap-3 w-full rounded-lg border px-4 py-3 ${displayError ? "border-red-300 bg-red-50/40" : "border-slate-200 bg-slate-50"
-                                }`}
-                        >
-                            <div className="flex items-center gap-3 min-w-0">
-                                <div className="h-9 w-9 rounded-md bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0">
-                                    {resumeUploadLoader ? (
-                                        <Loader2 className="h-4 w-4 animate-spin" />
-                                    ) : (
-                                        <FileText className="h-4 w-4" />
-                                    )}
-                                </div>
-                                <div className="min-w-0">
-                                    <p className="text-sm font-medium text-slate-800 truncate">{resume.fileName}</p>
-                                    <p className="text-xs text-slate-400">
-                                        {resumeUploadLoader ? "Uploading..." : "Uploaded"}
-                                    </p>
-                                </div>
-                            </div>
+                {/* Card */}
+                <div className="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden">
 
-                            <div className="flex items-center gap-1 shrink-0">
-                                <button
-                                    type="button"
-                                    onClick={() => inputRef.current?.click()}
-                                    disabled={resumeUploadLoader}
-                                    className="text-slate-400 hover:text-indigo-600 transition-colors disabled:opacity-50"
-                                    aria-label="Replace resume"
-                                >
-                                    <Edit className="h-4 w-4" />
-                                </button>
-                            </div>
-                        </div>
-                    ) : (
-                        <label
-                            htmlFor="resume-upload"
-                            onDragOver={(e) => {
-                                e.preventDefault();
-                                setIsDragging(true);
-                            }}
-                            onDragLeave={() => setIsDragging(false)}
-                            onDrop={handleDrop}
-                            className={`flex flex-col items-center justify-center gap-2 w-full rounded-lg border-2 border-dashed px-4 py-8 text-sm cursor-pointer transition-colors ${displayError
-                                ? "border-red-300 bg-red-50/40"
-                                : isDragging
-                                    ? "border-indigo-400 bg-indigo-50/50"
-                                    : "border-slate-300 hover:border-indigo-400 hover:bg-slate-50"
-                                }`}
-                        >
-                            {resumeUploadLoader ? (
-                                <Loader2 className="h-6 w-6 text-indigo-500 animate-spin" />
-                            ) : (
-                                <UploadCloud className="h-6 w-6 text-slate-400" />
-                            )}
-                            <span className="text-slate-600 text-center">
-                                {resumeUploadLoader ? (
-                                    "Uploading..."
-                                ) : (
-                                    <>
-                                        <span className="text-indigo-600 font-medium">Click to upload</span> or drag and drop
-                                    </>
-                                )}
-                            </span>
-                            <span className="text-xs text-slate-400">PDF only (max {MAX_SIZE_MB}MB)</span>
-                        </label>
-                    )}
+                    {/* Header */}
+                    <div className="bg-linear-to-r from-indigo-600 via-indigo-700 to-violet-700 px-6 py-5">
+                        <h2 className="text-xl font-bold text-white">
+                            Resume Upload
+                        </h2>
 
-                    <input
-                        id="resume-upload"
-                        ref={inputRef}
-                        type="file"
-                        accept={ACCEPTED_TYPES.join(",")}
-                        onChange={handleInputChange}
-                        className="hidden"
-                    />
-
-                    {displayError && (
-                        <p className="flex items-center gap-1 text-red-500 text-xs mt-1.5">
-                            <AlertCircle className="h-3.5 w-3.5" /> {displayError}
+                        <p className="text-indigo-100 text-sm mt-1">
+                            Upload your latest resume in PDF format
                         </p>
-                    )}
+                    </div>
+
+                    <div className="p-5 sm:p-6">
+
+                        {/* Skeleton */}
+                        {getResumeLoader ? (
+                            <div className="animate-pulse">
+
+                                <div className="flex items-center gap-4 border rounded-2xl p-5">
+                                    <div className="h-12 w-12 rounded-xl bg-slate-200" />
+
+                                    <div className="flex-1 space-y-2">
+                                        <div className="h-4 bg-slate-200 rounded w-1/3" />
+                                        <div className="h-3 bg-slate-200 rounded w-20" />
+                                    </div>
+                                </div>
+
+                            </div>
+                        ) : resume ? (
+
+                            /* Uploaded Resume */
+                            <div
+                                className={`rounded-2xl border p-4 sm:p-5 transition-all ${
+                                    displayError
+                                        ? "border-red-300 bg-red-50"
+                                        : "border-green-200 bg-green-50"
+                                }`}
+                            >
+                                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+
+                                    <div className="flex items-center gap-4 min-w-0">
+
+                                        <div className="h-14 w-14 rounded-2xl bg-white shadow-sm flex items-center justify-center shrink-0">
+                                            {resumeUploadLoader ? (
+                                                <Loader2 className="h-6 w-6 text-indigo-600 animate-spin" />
+                                            ) : (
+                                                <FileText className="h-6 w-6 text-red-500" />
+                                            )}
+                                        </div>
+
+                                        <div className="min-w-0">
+                                            <h3 className="font-semibold text-slate-800 truncate">
+                                                {resume.fileName}
+                                            </h3>
+
+                                            <div className="flex items-center gap-2 mt-1">
+                                                {resumeUploadLoader ? (
+                                                    <>
+                                                        <Loader2 className="h-4 w-4 animate-spin text-indigo-600" />
+                                                        <span className="text-sm text-slate-500">
+                                                            Uploading...
+                                                        </span>
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        <CheckCircle2 className="h-4 w-4 text-green-600" />
+                                                        <span className="text-sm text-green-700 font-medium">
+                                                            Successfully Uploaded
+                                                        </span>
+                                                    </>
+                                                )}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <button
+                                        type="button"
+                                        onClick={() =>
+                                            inputRef.current?.click()
+                                        }
+                                        disabled={resumeUploadLoader}
+                                        className="w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-medium transition disabled:opacity-50"
+                                    >
+                                        <Edit className="h-4 w-4" />
+                                        Replace Resume
+                                    </button>
+                                </div>
+                            </div>
+
+                        ) : (
+
+                            /* Upload Area */
+                            <label
+                                htmlFor="resume-upload"
+                                onDragOver={(e) => {
+                                    e.preventDefault();
+                                    setIsDragging(true);
+                                }}
+                                onDragLeave={() =>
+                                    setIsDragging(false)
+                                }
+                                onDrop={handleDrop}
+                                className={`
+                                    relative
+                                    flex
+                                    flex-col
+                                    items-center
+                                    justify-center
+                                    rounded-3xl
+                                    border-2
+                                    border-dashed
+                                    p-8
+                                    sm:p-12
+                                    cursor-pointer
+                                    transition-all
+                                    duration-300
+                                    ${
+                                        displayError
+                                            ? "border-red-300 bg-red-50"
+                                            : isDragging
+                                            ? "border-indigo-500 bg-indigo-50 scale-[1.01]"
+                                            : "border-slate-300 hover:border-indigo-400 hover:bg-slate-50"
+                                    }
+                                `}
+                            >
+                                {resumeUploadLoader ? (
+                                    <Loader2 className="h-12 w-12 text-indigo-600 animate-spin" />
+                                ) : (
+                                    <div className="h-20 w-20 rounded-full bg-indigo-100 flex items-center justify-center">
+                                        <UploadCloud className="h-10 w-10 text-indigo-600" />
+                                    </div>
+                                )}
+
+                                <h3 className="mt-5 text-lg font-semibold text-slate-800 text-center">
+                                    {resumeUploadLoader
+                                        ? "Uploading Resume..."
+                                        : "Upload Your Resume"}
+                                </h3>
+
+                                <p className="mt-2 text-sm text-slate-500 text-center max-w-md">
+                                    Drag & drop your resume here or click to
+                                    browse from your device.
+                                </p>
+
+                                <div className="mt-4 flex flex-wrap justify-center gap-2">
+                                    <span className="px-3 py-1 rounded-full bg-indigo-100 text-indigo-700 text-xs font-medium">
+                                        PDF Only
+                                    </span>
+
+                                    <span className="px-3 py-1 rounded-full bg-slate-100 text-slate-700 text-xs font-medium">
+                                        Max {MAX_SIZE_MB}MB
+                                    </span>
+                                </div>
+                            </label>
+                        )}
+
+                        <input
+                            id="resume-upload"
+                            ref={inputRef}
+                            type="file"
+                            accept={ACCEPTED_TYPES.join(",")}
+                            onChange={handleInputChange}
+                            className="hidden"
+                        />
+
+                        {displayError && (
+                            <div className="mt-4 flex items-center gap-2 rounded-xl border border-red-200 bg-red-50 px-4 py-3">
+                                <AlertCircle className="h-4 w-4 text-red-500 shrink-0" />
+
+                                <p className="text-sm text-red-600">
+                                    {displayError}
+                                </p>
+                            </div>
+                        )}
+                    </div>
                 </div>
             </div>
         </div>

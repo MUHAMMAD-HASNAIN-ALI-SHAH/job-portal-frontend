@@ -10,112 +10,185 @@ const ApplicantProfile = () => {
 
     if (loading) {
         return (
-            <div className="flex items-center justify-center h-[60vh]">
-                <Loader2 className="animate-spin h-6 w-6 text-indigo-600" />
+            <div className="flex items-center justify-center min-h-[60vh]">
+                <Loader2 className="h-8 w-8 animate-spin text-indigo-600" />
             </div>
         );
     }
 
     return (
-        <div className="bg-slate-50 relative">
-            <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-                {/* Header card */}
-                <div className="bg-white border border-slate-100 rounded-xl shadow-sm p-8 flex flex-col sm:flex-row sm:items-center gap-6">
-                    <div className="h-20 w-20 rounded-xl bg-indigo-50 text-indigo-700 text-2xl font-bold flex items-center justify-center shrink-0">
-                        {applicant?.fullName?.charAt(0) || "N/A"}
-                    </div>
+        <div className="min-h-screen bg-linear-to-b from-slate-100 via-slate-50 to-white py-6">
+            <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
 
-                    <div className="flex-1">
-                        <h1 className="text-2xl font-bold text-slate-900">{applicant?.fullName || "Name not set"}</h1>
-                        <p className="text-slate-500 text-sm mt-1">{applicant?.headLine || "Headline"}</p>
-                        <p className="text-slate-400 text-sm mt-1">
-                            {applicant?.yearsOfExperience ? `${applicant.yearsOfExperience} years of experience` : "Experience not set"}
-                        </p>
-                    </div>
+                {/* Header */}
+                <div className="bg-linear-to-r from-indigo-600 via-indigo-700 to-violet-700 rounded-3xl shadow-xl p-6 md:p-8 text-white">
+                    <div className="flex flex-col md:flex-row md:items-center gap-6">
 
-                    <button
-                        onClick={() => {
-                            setIsEditing(true);
-                        }}
-                        className="self-start sm:self-center bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium px-4 py-2 rounded-md transition-colors"
-                    >
-                        Edit profile
-                    </button>
+                        {/* Avatar */}
+                        <div className="h-24 w-24 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center text-4xl font-bold shrink-0">
+                            {applicant?.fullName?.charAt(0)?.toUpperCase() || "N"}
+                        </div>
+
+                        {/* User Info */}
+                        <div className="flex-1">
+                            <h1 className="text-2xl sm:text-3xl font-bold">
+                                {applicant?.fullName || "Name not set"}
+                            </h1>
+
+                            <p className="text-indigo-100 mt-2">
+                                {applicant?.headLine || "Headline not added"}
+                            </p>
+
+                            <p className="text-indigo-200 text-sm mt-2">
+                                {applicant?.yearsOfExperience
+                                    ? `${applicant.yearsOfExperience} years of experience`
+                                    : "Experience not set"}
+                            </p>
+
+                            {/* Profile Completion Example */}
+                            <div className="mt-4 max-w-sm">
+                                <div className="flex justify-between text-xs mb-1">
+                                    <span>Profile Status</span>
+                                    <span>Complete</span>
+                                </div>
+
+                                <div className="h-2 bg-white/20 rounded-full overflow-hidden">
+                                    <div className="h-full w-full bg-white rounded-full" />
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Edit Button */}
+                        <button
+                            onClick={() => setIsEditing(true)}
+                            className="w-full md:w-auto bg-white text-indigo-700 hover:bg-slate-100 px-5 py-3 rounded-xl font-semibold transition-all duration-200 shadow-md"
+                        >
+                            Edit Profile
+                        </button>
+                    </div>
                 </div>
 
-                {/* Details */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
-                    <div className="bg-white border-l-2 border-indigo-600 rounded-r-xl p-5">
-                        <p className="text-xs text-slate-400 mb-1">Expected salary</p>
-                        <p className="text-slate-800 text-sm font-medium">
-                            {applicant?.expectedSalary ? applicant.expectedSalary.toLocaleString() : "N/A"}
+                {/* Stats Cards */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-8">
+
+                    <div className="bg-white rounded-2xl shadow-sm hover:shadow-md transition-all border border-slate-100 p-5">
+                        <p className="text-xs uppercase tracking-wide text-slate-400 mb-2">
+                            Expected Salary
+                        </p>
+
+                        <p className="text-lg font-semibold text-slate-800">
+                            {applicant?.expectedSalary
+                                ? applicant.expectedSalary.toLocaleString()
+                                : "N/A"}
                         </p>
                     </div>
 
-                    <div className="bg-white border-l-2 border-indigo-600 rounded-r-xl p-5">
-                        <p className="text-xs text-slate-400 mb-1">Notice period</p>
-                        <p className="text-slate-800 text-sm font-medium">
-                            {applicant?.noticePeriod ? `${applicant.noticePeriod} days` : "N/A"}
+                    <div className="bg-white rounded-2xl shadow-sm hover:shadow-md transition-all border border-slate-100 p-5">
+                        <p className="text-xs uppercase tracking-wide text-slate-400 mb-2">
+                            Notice Period
+                        </p>
+
+                        <p className="text-lg font-semibold text-slate-800">
+                            {applicant?.noticePeriod
+                                ? `${applicant.noticePeriod} days`
+                                : "N/A"}
                         </p>
                     </div>
 
-                    <div className="bg-white border-l-2 border-indigo-600 rounded-r-xl p-5 sm:col-span-2">
-                        <p className="text-xs text-slate-400 mb-2">Preferred job types</p>
-                        <div className="flex flex-wrap gap-2">
-                            {applicant?.preferredJobTypes && applicant.preferredJobTypes.length ? (
+                    {/* Preferred Job Types */}
+                    <div className="bg-white rounded-2xl shadow-sm hover:shadow-md transition-all border border-slate-100 p-5 md:col-span-2">
+                        <h2 className="font-semibold text-slate-900 mb-4">
+                            Preferred Job Types
+                        </h2>
+
+                        <div className="flex flex-wrap gap-3">
+                            {applicant?.preferredJobTypes?.length ? (
                                 applicant.preferredJobTypes.map((type) => (
-                                    <span key={type} className="bg-indigo-50 text-indigo-700 text-xs font-medium px-2.5 py-1 rounded-full">
+                                    <span
+                                        key={type}
+                                        className="px-3 py-1.5 rounded-full bg-green-100 text-green-700 text-sm font-medium"
+                                    >
                                         {type}
                                     </span>
                                 ))
                             ) : (
-                                <p className="text-slate-800 text-sm font-medium">N/A</p>
+                                <p className="text-slate-500">N/A</p>
                             )}
                         </div>
                     </div>
 
-                    <div className="bg-white border-l-2 border-indigo-600 rounded-r-xl p-5 sm:col-span-2">
-                        <p className="text-xs text-slate-400 mb-2">Skills</p>
-                        <div className="flex flex-wrap gap-2">
-                            {applicant?.skills && applicant.skills.length ? (
+                    {/* Skills */}
+                    <div className="bg-white rounded-2xl shadow-sm hover:shadow-md transition-all border border-slate-100 p-5 md:col-span-2">
+                        <h2 className="font-semibold text-slate-900 mb-4">
+                            Skills
+                        </h2>
+
+                        <div className="flex flex-wrap gap-3">
+                            {applicant?.skills?.length ? (
                                 applicant.skills.map((skill) => (
-                                    <span key={skill} className="bg-slate-100 text-slate-700 text-xs font-medium px-2.5 py-1 rounded-full">
+                                    <span
+                                        key={skill}
+                                        className="px-3 py-1.5 rounded-full bg-indigo-100 text-indigo-700 text-sm font-medium hover:scale-105 transition-transform"
+                                    >
                                         {skill}
                                     </span>
                                 ))
                             ) : (
-                                <p className="text-slate-800 text-sm font-medium">N/A</p>
+                                <p className="text-slate-500">N/A</p>
                             )}
                         </div>
                     </div>
                 </div>
 
                 {/* Education */}
-                <div className="bg-white border border-slate-100 rounded-xl p-6 mt-6">
-                    <h2 className="text-sm font-semibold text-slate-900 mb-4">Education</h2>
-                    {applicant?.education && applicant.education.length ? (
-                        <div className="space-y-4">
+                <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 mt-8">
+                    <h2 className="text-lg font-semibold text-slate-900 mb-6">
+                        Education
+                    </h2>
+
+                    {applicant?.education?.length ? (
+                        <div className="space-y-6">
                             {applicant.education.map((edu, index) => (
-                                <div key={index} className="border-l-2 border-indigo-600 pl-4">
-                                    <p className="text-slate-800 text-sm font-medium">{edu.degree}</p>
-                                    <p className="text-slate-500 text-xs mt-0.5">{edu.institution}</p>
-                                    <p className="text-slate-400 text-xs mt-0.5">{edu.yearOfCompletion}</p>
+                                <div
+                                    key={index}
+                                    className="relative pl-8"
+                                >
+                                    <div className="absolute left-0 top-1 h-4 w-4 rounded-full bg-indigo-600" />
+
+                                    <div className="absolute left-1.75 top-5 -bottom-6 w-0.5 bg-indigo-200" />
+
+                                    <h3 className="font-semibold text-slate-800">
+                                        {edu.degree}
+                                    </h3>
+
+                                    <p className="text-slate-600 text-sm mt-1">
+                                        {edu.institution}
+                                    </p>
+
+                                    <p className="text-slate-400 text-xs mt-1">
+                                        {edu.yearOfCompletion}
+                                    </p>
                                 </div>
                             ))}
                         </div>
                     ) : (
-                        <p className="text-slate-600 text-sm">N/A</p>
+                        <p className="text-slate-500">No education added yet.</p>
                     )}
                 </div>
 
                 {/* Bio */}
-                <div className="bg-white border border-slate-100 rounded-xl p-6 mt-6">
-                    <h2 className="text-sm font-semibold text-slate-900 mb-2">Bio</h2>
-                    <p className="text-slate-600 text-sm leading-relaxed">{applicant?.bio || "N/A"}</p>
+                <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 mt-8">
+                    <h2 className="text-lg font-semibold text-slate-900 mb-4">
+                        About Me
+                    </h2>
+
+                    <p className="text-slate-600 leading-7">
+                        {applicant?.bio || "No bio available."}
+                    </p>
                 </div>
             </div>
 
-            {/* Edit modal */}
+            {/* Modal */}
             {isEditing && (
                 <ApplicantProfileForm setIsEditing={setIsEditing} />
             )}
