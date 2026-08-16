@@ -35,8 +35,7 @@ const useAuthStore = create<AuthState>((set) => ({
         useApplicantStore.getState().getUserResume();
       }
       if (response.data.user.role === "company") {
-        useCompanyStore.getState().getCompanyDetails();
-        useCompanyStore.getState().getJobs();
+        useCompanyStore.getState().retrieveAllData();
       }
       return 200;
     } catch (error: any) {
@@ -71,8 +70,7 @@ const useAuthStore = create<AuthState>((set) => ({
         useApplicantStore.getState().getUserResume();
       }
       if (response.data.user.role === "company") {
-        useCompanyStore.getState().getCompanyDetails();
-        useCompanyStore.getState().getJobs();
+        useCompanyStore.getState().retrieveAllData();
       }
     } catch (error: any) {
       console.error("Verification error:", error);

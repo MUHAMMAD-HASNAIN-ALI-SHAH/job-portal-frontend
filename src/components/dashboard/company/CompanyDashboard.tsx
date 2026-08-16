@@ -24,16 +24,8 @@ const jobStatusStyles: Record<
   },
 };
 
-const CANDIDATES: DashboardCandidate[] = [
-  { id: "1", name: "Ayesha Khan", role: "Frontend Developer", appliedFor: "Senior Frontend Engineer", appliedAt: "2 hours ago", status: "New" },
-  { id: "2", name: "Hamza Tariq", role: "UI/UX Designer", appliedFor: "Product Designer", appliedAt: "5 hours ago", status: "Shortlisted" },
-  { id: "3", name: "Sara Ahmed", role: "Backend Developer", appliedFor: "Backend Engineer (Node.js)", appliedAt: "1 day ago", status: "New" },
-  { id: "4", name: "Bilal Chaudhry", role: "QA Engineer", appliedFor: "QA Engineer", appliedAt: "2 days ago", status: "Rejected" },
-  { id: "5", name: "Mahnoor Fatima", role: "Frontend Developer", appliedFor: "Senior Frontend Engineer", appliedAt: "3 days ago", status: "Hired" },
-];
-
 const candidateStatusStyles: Record<DashboardCandidate["status"], string> = {
-  New: "bg-indigo-50 text-indigo-700",
+  Applied: "bg-indigo-50 text-indigo-700",
   Shortlisted: "bg-blue-50 text-blue-700",
   Rejected: "bg-red-50 text-red-600",
   Hired: "bg-green-50 text-green-700",
@@ -43,13 +35,19 @@ const getInitials = (name: string) =>
   name.split(" ").map((w) => w[0]).slice(0, 2).join("").toUpperCase();
 
 const CompanyDashboard = () => {
-  let { jobs } = useCompanyStore();
+  let { jobs, applications } = useCompanyStore();
   const { setSidebarMenu } = useNavigationStore();
   const STATS = [
     { label: "Active jobs", value: jobs.filter((job) => job.status === "active").length.toString() },
     { label: "Total applicants", value: jobs.reduce((acc, job) => acc + job.applicantsCount, 0).toString() },
-    { label: "Shortlisted", value: "23" },
-    { label: "Hired this month", value: "4" },
+    { label: "Shortlisted", value: applications.reduce((acc, app) => app.status === "shortlisted" ? acc + 1 : acc, 0).toString() },
+    {
+      label: "Hired this month", value: applications.reduce((acc, app) => {
+        const appDate = new Date(app.createdAt);
+        const now = new Date();
+        return (app.status === "hired" && appDate.getMonth() === now.getMonth() && appDate.getFullYear() === now.getFullYear()) ? acc + 1 : acc;
+      }, 0).toString()
+    },
   ];
 
   jobs = jobs.sort((a, b) => new Date(b.postedAt).getTime() - new Date(a.postedAt).getTime()).slice(0, 3);
@@ -115,28 +113,30 @@ const CompanyDashboard = () => {
       <div className="bg-white border border-slate-100 rounded-xl overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100">
           <h2 className="text-sm font-semibold text-slate-900">Recent candidates</h2>
-          <a href="/dashboard/candidates" className="text-xs text-indigo-600 hover:underline font-medium">
-            View all
-          </a>
         </div>
 
         <div className="divide-y divide-slate-100">
-          {CANDIDATES.map((candidate) => (
-            <div key={candidate.id} className="flex items-center justify-between gap-4 px-6 py-4 hover:bg-slate-50 transition-colors">
+          {applications && applications.map((app) => (
+            <div key={app._id} className="flex items-center justify-between gap-4 px-6 py-4 hover:bg-slate-50 transition-colors">
               <div className="flex items-center gap-3 min-w-0">
-                <div className="h-9 w-9 rounded-full bg-indigo-50 text-indigo-700 text-xs font-semibold flex items-center justify-center shrink-0">
-                  {getInitials(candidate.name)}
-                </div>
+                {(() => {
+                  const applicantName = typeof app.applicantId === 'string' ? app.applicantId : app.applicantId?.fullName ?? '';
+                  return (
+                    <div className="h-9 w-9 rounded-full bg-indigo-50 text-indigo-700 text-xs font-semibold flex items-center justify-center shrink-0">
+                      {getInitials(applicantName)}
+                    </div>
+                  );
+                })()}
                 <div className="min-w-0">
-                  <p className="text-sm font-medium text-slate-900 truncate">{candidate.name}</p>
+                  <p className="text-sm font-medium text-slate-900 truncate">{typeof app.applicantId === 'string' ? app.applicantId : app.applicantId?.fullName}</p>
                   <p className="text-xs text-slate-500 truncate">
-                    Applied for {candidate.appliedFor} · {candidate.appliedAt}
+                    Applied for {app.jobId.title} · {app.createdAt}
                   </p>
                 </div>
               </div>
 
-              <span className={`text-xs font-medium px-2.5 py-1 rounded-full shrink-0 ${candidateStatusStyles[candidate.status]}`}>
-                {candidate.status}
+              <span className={`text-xs font-medium px-2.5 py-1 rounded-full shrink-0 ${candidateStatusStyles[app.status.charAt(0).toUpperCase() + app.status.slice(1) as DashboardCandidate["status"]]}`}>
+                {app.status.charAt(0).toUpperCase() + app.status.slice(1)}
               </span>
             </div>
           ))}

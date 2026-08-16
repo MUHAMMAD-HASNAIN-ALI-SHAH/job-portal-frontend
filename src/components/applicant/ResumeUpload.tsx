@@ -182,17 +182,18 @@ const ResumeUpload = () => {
                                                     <Pencil className="h-4 w-4" />
                                                     {resume?.resumeUrl ? "Update Resume" : "Upload Resume"}
                                                 </button>
-                                                <button
-                                                    type="button"
-                                                    onClick={() => {
-                                                        setMenuOpen(false);
-                                                        deleteResume();
-                                                    }}
-                                                    className="w-full cursor-pointer flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-red-50"
-                                                >
-                                                    <Trash2 className="h-4 w-4" />
-                                                    Delete Resume
-                                                </button>
+                                                {resume?.resumeUrl && (
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => {
+                                                            setMenuOpen(false);
+                                                            deleteResume();
+                                                        }}
+                                                        className="w-full cursor-pointer flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-red-50"
+                                                    >
+                                                        <Trash2 className="h-4 w-4" />
+                                                        Delete Resume
+                                                    </button>)}
                                             </div>
                                         )}
                                     </div>

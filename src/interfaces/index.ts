@@ -104,7 +104,7 @@ export interface DashboardCandidate {
   role: string;
   appliedFor: string;
   appliedAt: string;
-  status: "New" | "Shortlisted" | "Rejected" | "Hired";
+  status: "Applied" | "Shortlisted" | "Rejected" | "Hired";
 }
 
 export type ExperienceLevel = "Internship" | "Entry" | "Mid" | "Senior" | "Lead";
@@ -117,8 +117,14 @@ export interface ResumeData {
 
 export interface Application {
   _id: string;
-  applicantId: string;
-  jobId: string;
+  applicantId: {
+    _id: string;
+    fullName: string;
+  };
+  jobId: {
+    _id: string;
+    title: string;
+  };
   status: "applied" | "shortlisted" | "rejected" | "hired";
   resume: string;
   coverLetter: string;

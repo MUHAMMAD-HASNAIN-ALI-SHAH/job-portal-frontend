@@ -42,8 +42,8 @@ const ApplicantSummary = ({ application, status, expanded, setStatus, setExpande
                     >
                         {application.status === "applied" && <option value="applied">Applied</option>}
                         <option value="shortlisted">Shortlisted</option>
-                        <option value="rejected">Rejected</option>
-                        <option value="hired">Hired</option>
+                        {application.status !== "applied" && <option value="rejected">Rejected</option>}
+                        {application.status !== "applied" && <option value="hired">Hired</option>}
                     </select>
 
                     <button

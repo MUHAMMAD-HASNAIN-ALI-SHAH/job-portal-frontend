@@ -22,6 +22,7 @@ interface CompanyState {
   updateCompanyDetails: (data: Partial<CompanyInterface>) => Promise<void>; // to update company details in the store
   getApplications: () => Promise<void>; // to fetch applications related to the company
   editApplication: (applicationId: string, updatedData: Partial<Application>) => void; // to update a specific application in the applications array
+  retrieveAllData: () => Promise<void>; // to fetch company details, jobs, and applications in one go
 }
 
 const useCompanyStore = create<CompanyState>((set) => ({
@@ -94,6 +95,13 @@ const useCompanyStore = create<CompanyState>((set) => ({
         app._id === applicationId ? { ...app, ...updatedData } : app
       ),
     }));
+  },
+  retrieveAllData: async () => {
+    await Promise.all([
+      useCompanyStore.getState().getCompanyDetails(),
+      useCompanyStore.getState().getJobs(),
+      useCompanyStore.getState().getApplications(),
+    ]);
   }
 }));
 
