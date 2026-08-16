@@ -9,6 +9,7 @@ import {
     View,
 } from "lucide-react";
 import useApplicantStore from "../../store/useApplicantStore";
+import ResumePreview from "./ResumePreview";
 
 const MAX_SIZE_MB = 1;
 const ACCEPTED_TYPES = [".pdf"];
@@ -19,6 +20,7 @@ const ResumeUpload = () => {
     const menuRef = useRef<HTMLDivElement>(null);
     const [localError, setLocalError] = useState<string | null>(null);
     const [menuOpen, setMenuOpen] = useState(false);
+    const [resumePreviewOpen, setResumePreviewOpen] = useState(false);
 
     const {
         getResumeLoader,
@@ -117,8 +119,8 @@ const ResumeUpload = () => {
                             /* Uploaded Resume */
                             <div
                                 className={`rounded-2xl border p-4 sm:p-5 transition-all ${displayError
-                                        ? "border-red-300 bg-red-50"
-                                        : "border-green-200 bg-green-50"
+                                    ? "border-red-300 bg-red-50"
+                                    : "border-green-200 bg-green-50"
                                     }`}
                             >
                                 <div className="flex items-center justify-between gap-4">
@@ -134,7 +136,7 @@ const ResumeUpload = () => {
                                         </div>
 
                                         <div className="min-w-0">
-                                            <h3 className="font-semibold text-slate-800 truncate">
+                                            <h3 onClick={() => setResumePreviewOpen(true)} className="font-semibold truncate text-blue-500 hover:underline select-none cursor-pointer">
                                                 {resume?.fileName}
                                             </h3>
                                             <p className="text-sm text-slate-500">
@@ -220,6 +222,7 @@ const ResumeUpload = () => {
                     </div>
                 </div>
             </div>
+            {resumePreviewOpen && <ResumePreview onClose={() => setResumePreviewOpen(false)} resumeFile={resume?.resumeUrl || ""} />}
         </div>
     );
 };
