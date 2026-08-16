@@ -33,7 +33,7 @@ const ExpandedApplicationDetails = ({ application }: { application: any }) => (
           </p>
           <p>
             <span className="font-medium text-slate-700">Resume:</span>{" "}
-            {application.resumeId?.fileName || "Not uploaded"}
+            {application.resume || "Not uploaded"}
           </p>
           <p>
             <span className="font-medium text-slate-700">Applied:</span>{" "}

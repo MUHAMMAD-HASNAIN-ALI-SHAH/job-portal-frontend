@@ -1,11 +1,12 @@
-import { useRef, useState, type DragEvent } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
-    UploadCloud,
     FileText,
-    Edit,
     Loader2,
     AlertCircle,
-    CheckCircle2,
+    MoreVertical,
+    Pencil,
+    Trash2,
+    View,
 } from "lucide-react";
 import useApplicantStore from "../../store/useApplicantStore";
 
@@ -15,16 +16,35 @@ const ACCEPTED_MIME = ["application/pdf"];
 
 const ResumeUpload = () => {
     const inputRef = useRef<HTMLInputElement>(null);
-
-    const [isDragging, setIsDragging] = useState(false);
+    const menuRef = useRef<HTMLDivElement>(null);
     const [localError, setLocalError] = useState<string | null>(null);
+    const [menuOpen, setMenuOpen] = useState(false);
 
     const {
         getResumeLoader,
         resume,
         uploadResume,
         resumeUploadLoader,
+        deleteResume,
+        deleteResumeLoader,
     } = useApplicantStore();
+
+    // Close the menu when clicking anywhere outside of it
+    useEffect(() => {
+        const handleClickOutside = (e: MouseEvent) => {
+            if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+                setMenuOpen(false);
+            }
+        };
+
+        if (menuOpen) {
+            document.addEventListener("mousedown", handleClickOutside);
+        }
+
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [menuOpen]);
 
     const validateAndUpload = (selected: File | null) => {
         if (!selected) return;
@@ -56,22 +76,14 @@ const ResumeUpload = () => {
         e.target.value = "";
     };
 
-    const handleDrop = (
-        e: DragEvent<HTMLLabelElement>
-    ) => {
-        e.preventDefault();
-        setIsDragging(false);
-        validateAndUpload(e.dataTransfer.files?.[0] ?? null);
-    };
-
     const displayError = localError;
 
     return (
-        <div className="w-full">
+        <div className="w-full mb-10">
             <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
 
                 {/* Card */}
-                <div className="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden">
+                <div className="bg-white rounded-3xl shadow-sm border border-slate-200">
 
                     {/* Header */}
                     <div className="bg-linear-to-r from-indigo-600 via-indigo-700 to-violet-700 px-6 py-5">
@@ -100,22 +112,21 @@ const ResumeUpload = () => {
                                 </div>
 
                             </div>
-                        ) : resume ? (
+                        ) : (
 
                             /* Uploaded Resume */
                             <div
-                                className={`rounded-2xl border p-4 sm:p-5 transition-all ${
-                                    displayError
+                                className={`rounded-2xl border p-4 sm:p-5 transition-all ${displayError
                                         ? "border-red-300 bg-red-50"
                                         : "border-green-200 bg-green-50"
-                                }`}
+                                    }`}
                             >
-                                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                                <div className="flex items-center justify-between gap-4">
 
                                     <div className="flex items-center gap-4 min-w-0">
 
                                         <div className="h-14 w-14 rounded-2xl bg-white shadow-sm flex items-center justify-center shrink-0">
-                                            {resumeUploadLoader ? (
+                                            {resumeUploadLoader || deleteResumeLoader ? (
                                                 <Loader2 className="h-6 w-6 text-indigo-600 animate-spin" />
                                             ) : (
                                                 <FileText className="h-6 w-6 text-red-500" />
@@ -124,108 +135,68 @@ const ResumeUpload = () => {
 
                                         <div className="min-w-0">
                                             <h3 className="font-semibold text-slate-800 truncate">
-                                                {resume.fileName}
+                                                {resume?.fileName}
                                             </h3>
-
-                                            <div className="flex items-center gap-2 mt-1">
-                                                {resumeUploadLoader ? (
-                                                    <>
-                                                        <Loader2 className="h-4 w-4 animate-spin text-indigo-600" />
-                                                        <span className="text-sm text-slate-500">
-                                                            Uploading...
-                                                        </span>
-                                                    </>
-                                                ) : (
-                                                    <>
-                                                        <CheckCircle2 className="h-4 w-4 text-green-600" />
-                                                        <span className="text-sm text-green-700 font-medium">
-                                                            Successfully Uploaded
-                                                        </span>
-                                                    </>
-                                                )}
-                                            </div>
+                                            <p className="text-sm text-slate-500">
+                                                {resume ? "Uploaded" : "No resume uploaded"}
+                                            </p>
                                         </div>
                                     </div>
 
-                                    <button
-                                        type="button"
-                                        onClick={() =>
-                                            inputRef.current?.click()
-                                        }
-                                        disabled={resumeUploadLoader}
-                                        className="w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-medium transition disabled:opacity-50"
-                                    >
-                                        <Edit className="h-4 w-4" />
-                                        Replace Resume
-                                    </button>
+                                    {/* Menu (kebab) icon + dropdown */}
+                                    <div className="relative shrink-0" ref={menuRef}>
+                                        <button
+                                            type="button"
+                                            onClick={() => setMenuOpen((prev) => !prev)}
+                                            disabled={resumeUploadLoader || deleteResumeLoader}
+                                            className="cursor-pointer p-2 rounded-lg hover:bg-slate-200/60 transition disabled:opacity-50"
+                                        >
+                                            <MoreVertical className="h-5 w-5 text-slate-600" />
+                                        </button>
+
+                                        {menuOpen && (
+                                            <div className="absolute right-0 mt-2 w-44 bg-white border border-slate-200 rounded-xl shadow-lg py-1 z-50">
+                                                {resume?.resumeUrl && (
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => {
+                                                            setMenuOpen(false);
+                                                            window.open(resume?.resumeUrl, "_blank");
+                                                        }}
+                                                        className="w-full cursor-pointer flex items-center gap-2 px-4 py-2 text-sm text-slate-700 hover:bg-slate-100"
+                                                    >
+                                                        <View className="h-4 w-4" />
+                                                        View Resume
+                                                    </button>
+                                                )}
+                                                <button
+                                                    type="button"
+                                                    onClick={() => {
+                                                        setMenuOpen(false);
+                                                        inputRef.current?.click();
+                                                    }}
+                                                    className="w-full cursor-pointer flex items-center gap-2 px-4 py-2 text-sm text-slate-700 hover:bg-slate-100"
+                                                >
+                                                    <Pencil className="h-4 w-4" />
+                                                    {resume?.resumeUrl ? "Update Resume" : "Upload Resume"}
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => {
+                                                        setMenuOpen(false);
+                                                        deleteResume();
+                                                    }}
+                                                    className="w-full cursor-pointer flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-red-50"
+                                                >
+                                                    <Trash2 className="h-4 w-4" />
+                                                    Delete Resume
+                                                </button>
+                                            </div>
+                                        )}
+                                    </div>
                                 </div>
                             </div>
 
-                        ) : (
-
-                            /* Upload Area */
-                            <label
-                                htmlFor="resume-upload"
-                                onDragOver={(e) => {
-                                    e.preventDefault();
-                                    setIsDragging(true);
-                                }}
-                                onDragLeave={() =>
-                                    setIsDragging(false)
-                                }
-                                onDrop={handleDrop}
-                                className={`
-                                    relative
-                                    flex
-                                    flex-col
-                                    items-center
-                                    justify-center
-                                    rounded-3xl
-                                    border-2
-                                    border-dashed
-                                    p-8
-                                    sm:p-12
-                                    cursor-pointer
-                                    transition-all
-                                    duration-300
-                                    ${
-                                        displayError
-                                            ? "border-red-300 bg-red-50"
-                                            : isDragging
-                                            ? "border-indigo-500 bg-indigo-50 scale-[1.01]"
-                                            : "border-slate-300 hover:border-indigo-400 hover:bg-slate-50"
-                                    }
-                                `}
-                            >
-                                {resumeUploadLoader ? (
-                                    <Loader2 className="h-12 w-12 text-indigo-600 animate-spin" />
-                                ) : (
-                                    <div className="h-20 w-20 rounded-full bg-indigo-100 flex items-center justify-center">
-                                        <UploadCloud className="h-10 w-10 text-indigo-600" />
-                                    </div>
-                                )}
-
-                                <h3 className="mt-5 text-lg font-semibold text-slate-800 text-center">
-                                    {resumeUploadLoader
-                                        ? "Uploading Resume..."
-                                        : "Upload Your Resume"}
-                                </h3>
-
-                                <p className="mt-2 text-sm text-slate-500 text-center max-w-md">
-                                    Drag & drop your resume here or click to
-                                    browse from your device.
-                                </p>
-
-                                <div className="mt-4 flex flex-wrap justify-center gap-2">
-                                    <span className="px-3 py-1 rounded-full bg-indigo-100 text-indigo-700 text-xs font-medium">
-                                        PDF Only
-                                    </span>
-
-                                    <span className="px-3 py-1 rounded-full bg-slate-100 text-slate-700 text-xs font-medium">
-                                        Max {MAX_SIZE_MB}MB
-                                    </span>
-                                </div>
-                            </label>
                         )}
 
                         <input

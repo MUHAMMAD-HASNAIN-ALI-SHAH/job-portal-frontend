@@ -120,7 +120,7 @@ export interface Application {
   applicantId: string;
   jobId: string;
   status: "applied" | "shortlisted" | "rejected" | "hired";
-  resumeId: string;
+  resume: string;
   coverLetter: string;
   noticePeriod: number;
   expectedSalary: number;

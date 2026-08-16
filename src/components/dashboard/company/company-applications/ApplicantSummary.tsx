@@ -59,8 +59,8 @@ const ApplicantSummary = ({ application, status, expanded, setStatus, setExpande
             {/* Show resume */}
             {(application.status === "applied" || application.status === "shortlisted") && <div className="flex justify-end w-full">
                 <button
-                    onClick={() => window.open(application.resumeId?.resumeUrl, "_blank", "noopener,noreferrer")}
-                    disabled={!application.resumeId?.resumeUrl}
+                    onClick={() => window.open(application.resume, "_blank", "noopener,noreferrer")}
+                    disabled={!application.resume}
                     className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 disabled:bg-slate-200 disabled:text-slate-400 disabled:cursor-not-allowed text-white rounded-md text-sm font-medium transition-colors"
                 >
                     Show Resume

@@ -123,7 +123,7 @@ export const JobDetailsCard = ({ job, alreadyApplied }: { job: Job; alreadyAppli
               <Briefcase className="h-3.5 w-3.5" />
               {job.employmentType}
             </div>
-            <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-slate-900 break-words">{job.title}</h1>
+            <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-slate-900 wrap-break-word">{job.title}</h1>
 
             <div className="flex flex-wrap gap-2 mt-3 sm:mt-4">
               <span className="px-3 py-1 bg-indigo-50 text-indigo-700 rounded-full text-xs sm:text-sm font-medium">

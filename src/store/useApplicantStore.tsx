@@ -15,6 +15,7 @@ interface ApplicantState {
   getResumeLoader: boolean;
   resumeUploadLoader: boolean;
   getApplicationsLoader: boolean;
+  deleteResumeLoader: boolean;
 
   // Methods
   getApplicantDetails: () => Promise<void>;
@@ -22,6 +23,7 @@ interface ApplicantState {
   getUserResume: () => Promise<void>;
   uploadResume: (file: File) => Promise<void>;
   getMyApplications: () => Promise<void>;
+  deleteResume: () => Promise<void>;
 }
 
 const useApplicantStore = create<ApplicantState>((set) => ({
@@ -33,6 +35,7 @@ const useApplicantStore = create<ApplicantState>((set) => ({
   getResumeLoader: false,
   resumeUploadLoader: false,
   getApplicationsLoader: false,
+  deleteResumeLoader: false,
 
   getApplicantDetails: async () => {
     try {
@@ -67,15 +70,15 @@ const useApplicantStore = create<ApplicantState>((set) => ({
       }
     } catch (err: any) {
       console.error("Failed to fetch resume:", err?.response?.data || err.message);
-      toast.error("Failed to fetch resume");
     } finally {
       set({ getResumeLoader: false });
     }
   },
   uploadResume: async (file) => {
     try {
+      set({ resumeUploadLoader: true });
       const base64 = await readFileAsBase64(file);
-      const res = await axiosInstance.post("/api/v5/resume", {
+      const res = await axiosInstance.put("/api/v5/resume", {
         resumeBase64: base64,
         fileName: file.name,
       });
@@ -92,6 +95,8 @@ const useApplicantStore = create<ApplicantState>((set) => ({
     } catch (err: any) {
       console.error("Resume upload failed:", err?.response?.data || err.message);
       toast.error(err?.response?.data?.msg || "Failed to upload resume");
+    } finally {
+      set({ resumeUploadLoader: false });
     }
   },
   getMyApplications: async () => {
@@ -104,7 +109,20 @@ const useApplicantStore = create<ApplicantState>((set) => ({
     } finally {
       set({ getApplicationsLoader: false });
     }
-  }
+  },
+  deleteResume: async () => {
+    try {
+      set({ deleteResumeLoader: true });
+      await axiosInstance.delete("/api/v5/resume");
+      set({ resume: null });
+      toast.success("Resume deleted successfully");
+    } catch (err: any) {
+      console.error("Failed to delete resume:", err?.response?.data || err.message);
+      toast.error(err?.response?.data?.msg || "Failed to delete resume");
+    } finally {
+      set({ deleteResumeLoader: false });
+    }
+  },
 }));
 
 export default useApplicantStore;
