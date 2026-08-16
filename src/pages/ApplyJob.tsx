@@ -2,7 +2,6 @@ import { ArrowLeft } from "lucide-react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import {
-  AlreadyResumeUi,
   ApplyForm,
   JobApplyError,
   JobApplySkeleton,
@@ -58,7 +57,6 @@ const ApplyJob = () => {
         </button>
         <div className="bg-white rounded-2xl border shadow-sm overflow-hidden">
           <JobSummaryHeader job={job} />
-          <AlreadyResumeUi />
           <ApplyForm
             coverLetter={coverLetter}
             setCoverLetter={setCoverLetter}

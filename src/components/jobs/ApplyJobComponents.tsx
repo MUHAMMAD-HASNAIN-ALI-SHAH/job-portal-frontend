@@ -3,7 +3,6 @@ import { SearchX, UploadCloud, CheckCircle2 } from "lucide-react";
 import type { Job } from "../../interfaces";
 import Navbar from "../Navbar";
 import Footer from "../Footer";
-import useApplicantStore from "../../store/useApplicantStore";
 
 export interface ApplyFormErrors {
   coverLetter?: string;
@@ -122,32 +121,13 @@ export const JobSummaryHeader = ({ job }: { job: Job }) => (
   </div>
 );
 
-export const AlreadyResumeUi = () => {
-  const { resume } = useApplicantStore();
-
-  if (!resume) return null;
-
-  return (
-    <div className="bg-white border-b">
-      <div className="max-w-7xl mx-auto px-6 sm:px-10 py-4">
-        <div className="flex items-center gap-3 w-full rounded-xl border border-green-100 bg-green-50/60 px-4 py-3">
-          <div className="h-10 w-10 rounded-full bg-green-100 text-green-700 flex items-center justify-center shrink-0">
-            <CheckCircle2 className="h-5 w-5" />
-          </div>
-          <div className="min-w-0">
-            <p className="text-sm font-semibold text-slate-800 truncate">Resume already uploaded</p>
-            <p className="text-xs text-slate-500 mt-0.5">You can replace it below if you'd like to use a different one.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
 interface ApplyFormProps {
   coverLetter: string;
   setCoverLetter: (value: string) => void;
-  resume: File | null;
+  resume: {
+    resumeUrl: string;
+    fileName: string;
+  } | null;
   onResumeChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   expectedSalary: string;
   setExpectedSalary: (value: string) => void;
@@ -195,10 +175,10 @@ export const ApplyForm = ({
         >
           <UploadCloud className="h-6 w-6 text-slate-400" />
           <span className="text-slate-600">
-            {resume ? resume.name : "Click to upload your resume (PDF, DOC)"}
+            {resume ? resume.fileName : "Click to upload your resume (PDF, DOC)"}
           </span>
         </label>
-        <input id="resume" type="file" accept=".pdf,.doc,.docx" onChange={onResumeChange} className="hidden" />
+        <input id="resume" type="file" accept=".pdf" onChange={onResumeChange} className="hidden" />
         {errors.resume && <p className="text-red-500 text-xs mt-1">{errors.resume}</p>}
       </div>
 

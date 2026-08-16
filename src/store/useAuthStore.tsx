@@ -24,6 +24,7 @@ const useAuthStore = create<AuthState>((set) => ({
   // Methods
   login: async (email: string, password: string) => {
     try {
+      set({ isAuthenticatedLoading: true });
       const response = await axiosInstance.post("/api/v1/auth/login", {
         email,
         password,
@@ -42,6 +43,8 @@ const useAuthStore = create<AuthState>((set) => ({
       toast.error(error.response?.data?.msg || "Login failed.");
       console.error("Login error:", error);
       return 500;
+    } finally {
+      set({ isAuthenticatedLoading: false });
     }
   },
 
@@ -57,6 +60,7 @@ const useAuthStore = create<AuthState>((set) => ({
 
   verify: async () => {
     try {
+      set({ isAuthenticatedLoading: true });
       const response = await axiosInstance.get("/api/v1/auth/verify");
       set({
         user: response.data.user,

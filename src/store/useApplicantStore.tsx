@@ -86,7 +86,7 @@ const useApplicantStore = create<ApplicantState>((set) => ({
       set({
         resume: {
           resumeUrl: res.data.resumeUrl,
-          fileName: res.data.fileName || file.name,
+          fileName: res.data.fileName,
         }
       });
 

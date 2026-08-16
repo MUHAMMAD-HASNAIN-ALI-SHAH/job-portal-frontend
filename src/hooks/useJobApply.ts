@@ -29,9 +29,21 @@ export const useJobApply = () => {
   const [errors, setErrors] = useState<ApplyFormErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-  const [resume, setResume] = useState<File | null>(null);
+  const [resume, setResume] = useState<{ resumeUrl: string; fileName: string } | null>(myResume ? {
+    resumeUrl: myResume.resumeUrl,
+    fileName: myResume.fileName
+  } : null);
 
-  const hasResumeOnFile = Boolean(myResume) || Boolean(resume);
+  useEffect(() => {
+  if (myResume) {
+    setResume({
+      resumeUrl: myResume.resumeUrl,
+      fileName: myResume.fileName,
+    });
+  }
+}, [myResume]);
+
+  const hasResumeOnFile = Boolean(resume);
 
   useEffect(() => {
     if (!id) return;
@@ -43,7 +55,7 @@ export const useJobApply = () => {
       try {
         const res = await axiosInstance.get(`/api/v4/job/${id}`);
         setJob(res.data.job);
-        if(res.data.applied) {
+        if (res.data.applied) {
           setSubmitted(true);
           navigate(`/job/${id}`);
         }
@@ -66,7 +78,8 @@ export const useJobApply = () => {
 
     if (selectedFile) {
       try {
-        setResume(selectedFile);
+        const base64Resume = await readFileAsBase64(selectedFile);
+        setResume({ resumeUrl: base64Resume, fileName: selectedFile.name });
         setErrors((prev) => ({ ...prev, resume: undefined }));
       } catch (err) {
         console.error("Error reading resume file:", err);
@@ -88,11 +101,11 @@ export const useJobApply = () => {
       nextErrors.resume = "Please attach your resume.";
     }
 
-    if (expectedSalary && Number(expectedSalary) <= 0) {
+    if (!expectedSalary || Number(expectedSalary) <= 0) {
       nextErrors.expectedSalary = "Expected salary can't be negative and zero.";
     }
 
-    if (noticePeriod && Number(noticePeriod) <= 0) {
+    if (!noticePeriod || Number(noticePeriod) <= 0) {
       nextErrors.noticePeriod = "Notice period can't be negative and zero.";
     }
 
@@ -108,20 +121,16 @@ export const useJobApply = () => {
 
     setIsSubmitting(true);
 
-    const resumeBase64 = resume ? await readFileAsBase64(resume) : null;
-
     try {
-      console.log("Submitting application for job ID:", job);
       const payload = {
         jobId: job._id,
         coverLetter,
-        resume: resumeBase64 || "",
-        fileName: resume?.name || "",
-        expectedSalary: expectedSalary ? Number(expectedSalary) : undefined,
-        noticePeriod: noticePeriod ? Number(noticePeriod) : undefined,
+        resumeUrl: resume?.resumeUrl,
+        fileName: resume?.fileName,
+        expectedSalary: Number(expectedSalary),
+        noticePeriod: Number(noticePeriod),
       };
-
-      console.log("Submitting application with payload:", payload);
+      // console.log("Submitting application with payload:", payload);
 
       await axiosInstance.post(`/api/v6/application`, payload);
 

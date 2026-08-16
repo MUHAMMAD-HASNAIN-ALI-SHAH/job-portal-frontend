@@ -18,7 +18,7 @@ const Home = () => {
       <div className="bg-white text-slate-800">
 
         {/* ================= HERO ================= */}
-        <section className="relative overflow-hidden bg-gradient-to-br from-indigo-700 via-indigo-600 to-violet-700">
+        <section className="relative overflow-hidden bg-linear-to-br from-indigo-700 via-indigo-600 to-violet-700">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.15),transparent_35%)]" />
           <div className="absolute -left-20 top-20 h-72 w-72 rounded-full bg-indigo-400/20 blur-3xl" />
           <div className="absolute right-0 bottom-0 h-72 w-72 rounded-full bg-violet-400/20 blur-3xl" />
@@ -264,7 +264,7 @@ const Home = () => {
               {TECH_SKILLS.map((skill) => (
                 <span
                   key={skill}
-                  className="px-5 py-3 rounded-full bg-gradient-to-r from-indigo-50 to-violet-50 text-indigo-700 font-medium hover:scale-105 transition"
+                  className="px-5 py-3 rounded-full bg-linear-to-r from-indigo-50 to-violet-50 text-indigo-700 font-medium hover:scale-105 transition"
                 >
                   {skill}
                 </span>
@@ -275,7 +275,7 @@ const Home = () => {
         </section>
 
         {/* ================= CTA ================= */}
-        <section className="bg-gradient-to-r from-indigo-700 to-violet-700 py-24">
+        <section className="bg-linear-to-r from-indigo-700 to-violet-700 py-24">
           <div className="max-w-5xl mx-auto px-6 text-center">
 
             <h2 className="text-4xl md:text-5xl font-bold text-white">
