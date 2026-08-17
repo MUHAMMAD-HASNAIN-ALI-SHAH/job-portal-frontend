@@ -2,11 +2,9 @@ import type { DashboardCandidate, DashboardJob, Job } from '../../../interfaces'
 import useCompanyStore from '../../../store/useCompanyStore';
 import JobCard from './ui/JobCard';
 import useNavigationStore from '../../../store/useNavigationStore';
+import { CompanyDashboardSkeleton } from './Skeleton';
 
-const jobStatusStyles: Record<
-  DashboardJob["status"],
-  { accent: string; badge: string; iconBg: string }
-> = {
+const jobStatusStyles: Record<DashboardJob["status"], { accent: string; badge: string; iconBg: string }> = {
   Active: {
     accent: "border-l-green-500",
     badge: "bg-green-50 text-green-700",
@@ -35,8 +33,13 @@ const getInitials = (name: string) =>
   name.split(" ").map((w) => w[0]).slice(0, 2).join("").toUpperCase();
 
 const CompanyDashboard = () => {
-  let { jobs, applications } = useCompanyStore();
+  let { jobs, applications, getApplicationsLoader, getJobsLoader, getCompanyDetailsLoader } = useCompanyStore();
   const { setSidebarMenu } = useNavigationStore();
+
+  if (getApplicationsLoader && getJobsLoader && getCompanyDetailsLoader) {
+    return <CompanyDashboardSkeleton />;
+  }
+
   const STATS = [
     { label: "Active jobs", value: jobs.filter((job) => job.status === "active").length.toString() },
     { label: "Total applicants", value: jobs.reduce((acc, job) => acc + job.applicantsCount, 0).toString() },
