@@ -69,7 +69,6 @@ const JobDetails = () => {
   return (
     <>
       <Navbar />
-
       <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6">
         <button
           onClick={() => navigate("/all-jobs")}

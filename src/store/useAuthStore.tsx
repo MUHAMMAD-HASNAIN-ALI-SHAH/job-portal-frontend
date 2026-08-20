@@ -38,7 +38,7 @@ const useAuthStore = create<AuthState>((set) => ({
       }
       return 200;
     } catch (error: any) {
-      toast.error(error.response?.data?.msg || "Login failed.");
+      toast.error(error.response?.data?.message || "Login failed.");
       console.error("Login error:", error);
       return 500;
     } finally {

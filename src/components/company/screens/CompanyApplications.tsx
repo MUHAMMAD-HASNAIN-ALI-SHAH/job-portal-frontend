@@ -34,10 +34,19 @@ const CompanyApplications = () => {
           ))}
         </div>
       ) : jobs.length === 0 ? (
-        <div className="bg-white border border-slate-200 rounded-xl p-12 text-center flex flex-col items-center">
-          <div className="h-12 w-12 rounded-full bg-slate-50 flex items-center justify-center mb-3">
+        <div className="bg-white rounded-3xl border border-slate-200 shadow-sm p-12 text-center">
+
+          <div className="mx-auto h-20 w-20 rounded-full bg-indigo-100 flex items-center justify-center">
             <Inbox className="h-6 w-6 text-slate-400" />
           </div>
+
+          <h3 className="mt-6 text-2xl  font-bold text-slate-900">
+            No Jobs and Applications Found
+          </h3>
+
+          <p className="mt-3 text-slate-500 max-w-md mx-auto">
+            Add a job posting to start receiving applications from candidates.
+          </p>
         </div>
       ) : (
         <div className="">

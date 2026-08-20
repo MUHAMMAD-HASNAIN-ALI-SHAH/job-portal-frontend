@@ -124,8 +124,6 @@ const CompanyAddJob = () => {
         ...formData,
       };
 
-      console.log("Submitting job:", payload);
-
       const res = await axiosInstance.post("/api/v4/job", payload);
 
       toast.success("Job posted successfully");

@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { X } from "lucide-react"
+import { X, Inbox } from "lucide-react"
 import type { Job } from "../../../../interfaces"
 import useCompanyNavigationStore from "../../../../store/useCompanyNavigationStore"
 import JobApplicationsCard from "./JobApplicationsCard"
@@ -106,17 +106,15 @@ const JobApplications = ({ job }: { job: Job }) => {
                         <button
                             key={tab}
                             onClick={() => setActiveTab(tab)}
-                            className={`relative px-3 py-2.5 text-sm font-medium transition-colors ${
-                                isActive
-                                    ? "text-slate-900"
-                                    : "text-slate-500 hover:text-slate-700"
-                            }`}
+                            className={`relative px-3 py-2.5 text-sm font-medium transition-colors ${isActive
+                                ? "text-slate-900"
+                                : "text-slate-500 hover:text-slate-700"
+                                }`}
                         >
                             {tab.charAt(0).toUpperCase() + tab.slice(1)}
                             <span
-                                className={`ml-1.5 text-xs ${
-                                    isActive ? "text-slate-500" : "text-slate-400"
-                                }`}
+                                className={`ml-1.5 text-xs ${isActive ? "text-slate-500" : "text-slate-400"
+                                    }`}
                             >
                                 ({count})
                             </span>
@@ -128,9 +126,28 @@ const JobApplications = ({ job }: { job: Job }) => {
                 })}
             </div>
 
+            {
+                filteredApplications.length === 0 && (
+                    <div className="bg-white rounded-3xl border border-slate-200 shadow-sm p-12 text-center">
+
+                        <div className="mx-auto h-20 w-20 rounded-full bg-indigo-100 flex items-center justify-center">
+                            <Inbox className="h-8 w-8 text-indigo-600" />
+                        </div>
+
+                        <h3 className="mt-6 text-2xl font-bold text-slate-900">
+                            No Applications Found
+                        </h3>
+
+                        <p className="mt-3 text-slate-500 max-w-md mx-auto">
+                            No {activeTab} applications found for this job posting.
+                        </p>
+                    </div>
+                )
+            }
+
             {/* Applications list */}
             <div className="mt-3">
-                {filteredApplications.length > 0 ? (
+                {filteredApplications.length > 0 &&
                     <div className="flex flex-col gap-2">
                         {filteredApplications.map((application) => (
                             <JobApplicationsCard
@@ -139,11 +156,7 @@ const JobApplications = ({ job }: { job: Job }) => {
                             />
                         ))}
                     </div>
-                ) : (
-                    <p className="text-sm text-slate-400 text-center py-8">
-                        No {activeTab} applications yet.
-                    </p>
-                )}
+                }
             </div>
         </div>
     )

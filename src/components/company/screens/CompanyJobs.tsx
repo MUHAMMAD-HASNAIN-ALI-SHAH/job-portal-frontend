@@ -1,3 +1,4 @@
+import { Search } from "lucide-react";
 import type { DashboardJob, Job } from "../../../interfaces";
 import useCompanyStore from "../../../store/useCompanyStore";
 import JobCard from "../components/company-jobs/JobCard";
@@ -50,6 +51,25 @@ const CompanyJobs = () => {
                     <span className="h-2 w-2 rounded-full bg-slate-300" /> Closed
                 </span>
             </div>
+
+            {
+                jobs.length === 0 && (
+                    <div className="bg-white rounded-3xl border border-slate-200 shadow-sm p-12 text-center">
+
+                        <div className="mx-auto h-20 w-20 rounded-full bg-indigo-100 flex items-center justify-center">
+                            <Search className="h-8 w-8 text-indigo-600" />
+                        </div>
+
+                        <h3 className="mt-6 text-2xl font-bold text-slate-900">
+                            No Jobs Found
+                        </h3>
+
+                        <p className="mt-3 text-slate-500 max-w-md mx-auto">
+                            Add a new job posting to see it here.
+                        </p>
+                    </div>
+                )
+            }
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {jobs.map((job: Job) => {
