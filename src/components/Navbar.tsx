@@ -100,9 +100,9 @@ const Navbar = () => {
           {/* LOGO */}
           <Link
             to="/"
-            className="flex items-center gap-3 shrink-0"
+            className="flex items-center gap-3 shrink-0 group"
           >
-            <div className="h-10 w-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center shadow-lg">
+            <div className="h-10 w-10 rounded-xl bg-linear-to-br from-indigo-500 to-indigo-700 text-white flex items-center justify-center shadow-lg shadow-indigo-200 group-hover:shadow-indigo-300 transition-shadow">
               <Briefcase size={18} />
             </div>
 
@@ -110,7 +110,7 @@ const Navbar = () => {
               <h2 className="font-bold text-lg text-slate-900 leading-none">
                 JobStack
               </h2>
-              <p className="text-[10px] text-slate-500">
+              <p className="text-[10px] text-slate-500 tracking-wide">
                 Career Platform
               </p>
             </div>
@@ -118,34 +118,34 @@ const Navbar = () => {
 
           {/* CENTER NAVIGATION */}
           {!user && (
-            <nav className="hidden lg:flex items-center gap-8">
+            <nav className="hidden lg:flex items-center gap-1 bg-slate-50 rounded-full px-1.5 py-1.5 border border-slate-100">
               <a
                 href="/#about"
-                className="text-sm font-medium text-slate-600 hover:text-indigo-600 transition"
+                className="text-sm font-medium text-slate-600 hover:text-indigo-600 hover:bg-white hover:shadow-sm px-3.5 py-1.5 rounded-full transition-all"
               >
                 About
               </a>
 
               <a
                 href="/#features"
-                className="text-sm font-medium text-slate-600 hover:text-indigo-600 transition"
+                className="text-sm font-medium text-slate-600 hover:text-indigo-600 hover:bg-white hover:shadow-sm px-3.5 py-1.5 rounded-full transition-all"
               >
                 Features
               </a>
 
               <a
                 href="/#fields"
-                className="text-sm font-medium text-slate-600 hover:text-indigo-600 transition"
+                className="text-sm font-medium text-slate-600 hover:text-indigo-600 hover:bg-white hover:shadow-sm px-3.5 py-1.5 rounded-full transition-all"
               >
                 Skills
               </a>
 
               <Link
                 to="/all-jobs"
-                className={`text-sm font-medium transition ${
+                className={`text-sm font-medium px-3.5 py-1.5 rounded-full transition-all ${
                   location.pathname === "/all-jobs"
-                    ? "text-indigo-600"
-                    : "text-slate-600 hover:text-indigo-600"
+                    ? "text-indigo-600 bg-white shadow-sm"
+                    : "text-slate-600 hover:text-indigo-600 hover:bg-white hover:shadow-sm"
                 }`}
               >
                 Jobs
@@ -153,14 +153,14 @@ const Navbar = () => {
 
               <a
                 href="/#companies"
-                className="text-sm font-medium text-slate-600 hover:text-indigo-600 transition"
+                className="text-sm font-medium text-slate-600 hover:text-indigo-600 hover:bg-white hover:shadow-sm px-3.5 py-1.5 rounded-full transition-all"
               >
                 Companies
               </a>
 
               <a
                 href="/#contact"
-                className="text-sm font-medium text-slate-600 hover:text-indigo-600 transition"
+                className="text-sm font-medium text-slate-600 hover:text-indigo-600 hover:bg-white hover:shadow-sm px-3.5 py-1.5 rounded-full transition-all"
               >
                 Contact
               </a>
@@ -169,10 +169,14 @@ const Navbar = () => {
 
           {/* USER QUICK LINKS */}
           {user?.role === "applicant" && (
-            <div className="hidden lg:flex items-center gap-2">
+            <div className="hidden lg:flex items-center gap-1 bg-slate-50 rounded-full px-1.5 py-1.5 border border-slate-100">
               <Link
                 to="/all-jobs"
-                className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-100"
+                className={`flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium transition-all ${
+                  location.pathname === "/all-jobs"
+                    ? "text-indigo-600 bg-white shadow-sm"
+                    : "text-slate-600 hover:text-indigo-600 hover:bg-white hover:shadow-sm"
+                }`}
               >
                 <Search size={15} />
                 Browse Jobs
@@ -180,7 +184,11 @@ const Navbar = () => {
 
               <Link
                 to="/my-applications"
-                className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-100"
+                className={`flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium transition-all ${
+                  location.pathname === "/my-applications"
+                    ? "text-indigo-600 bg-white shadow-sm"
+                    : "text-slate-600 hover:text-indigo-600 hover:bg-white hover:shadow-sm"
+                }`}
               >
                 <FileText size={15} />
                 Applications
@@ -196,14 +204,14 @@ const Navbar = () => {
               <div className="hidden md:flex items-center gap-3">
                 <Link
                   to="/login"
-                  className="text-sm font-medium text-slate-600 hover:text-slate-900"
+                  className="text-sm font-medium text-slate-600 hover:text-slate-900 px-3 py-2"
                 >
                   Login
                 </Link>
 
                 <Link
                   to="/register"
-                  className="bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium px-5 py-2.5 rounded-xl transition"
+                  className="bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium px-5 py-2.5 rounded-xl shadow-md shadow-indigo-200 hover:shadow-lg hover:shadow-indigo-300 transition-all"
                 >
                   Get Started
                 </Link>
@@ -222,15 +230,15 @@ const Navbar = () => {
                       !dropdownOpen
                     )
                   }
-                  className="flex items-center gap-2 border border-slate-200 rounded-full pl-1.5 pr-3 py-1.5 hover:bg-slate-50 transition"
+                  className="flex items-center gap-2 border border-slate-200 rounded-full pl-1.5 pr-3 py-1.5 hover:bg-slate-50 hover:border-slate-300 transition-colors"
                 >
-                  <div className="h-8 w-8 rounded-full bg-indigo-100 text-indigo-700 font-semibold flex items-center justify-center">
+                  <div className="h-8 w-8 rounded-full bg-linear-to-br from-indigo-500 to-indigo-700 text-white font-semibold flex items-center justify-center shadow-sm">
                     {initial}
                   </div>
 
                   <ChevronDown
                     size={16}
-                    className={`transition-transform ${
+                    className={`text-slate-500 transition-transform ${
                       dropdownOpen
                         ? "rotate-180"
                         : ""
@@ -241,14 +249,20 @@ const Navbar = () => {
                 {dropdownOpen && (
                   <div className="absolute right-0 mt-3 w-64 bg-white rounded-2xl border border-slate-200 shadow-xl overflow-hidden">
 
-                    <div className="px-4 py-4 border-b border-slate-100">
-                      <p className="font-medium text-slate-900 truncate">
-                        {user.email}
-                      </p>
-
-                      <p className="text-xs text-slate-500 capitalize mt-1">
-                        {user.role}
-                      </p>
+                    <div className="px-4 py-4 border-b border-slate-100 bg-linear-to-br from-indigo-50/60 to-transparent">
+                      <div className="flex items-center gap-3">
+                        <div className="h-9 w-9 rounded-full bg-linear-to-br from-indigo-500 to-indigo-700 text-white font-semibold flex items-center justify-center shrink-0 shadow-sm">
+                          {initial}
+                        </div>
+                        <div className="min-w-0">
+                          <p className="font-medium text-slate-900 truncate text-sm">
+                            {user.email}
+                          </p>
+                          <p className="text-xs text-slate-500 capitalize mt-0.5">
+                            {user.role}
+                          </p>
+                        </div>
+                      </div>
                     </div>
 
                     <div className="py-2">
@@ -261,7 +275,7 @@ const Navbar = () => {
                               false
                             )
                           }
-                          className="flex items-center gap-3 px-4 py-3 text-sm text-slate-700 hover:bg-indigo-50 hover:text-indigo-700 transition"
+                          className="flex items-center gap-3 px-4 py-3 text-sm text-slate-700 hover:bg-indigo-50 hover:text-indigo-700 transition-colors"
                         >
                           {link.icon}
                           {link.label}
@@ -272,7 +286,7 @@ const Navbar = () => {
                     <div className="border-t border-slate-100 p-2">
                       <button
                         onClick={onLogout}
-                        className="w-full flex items-center gap-3 px-3 py-3 rounded-xl text-red-600 hover:bg-red-50 transition"
+                        className="w-full flex items-center gap-3 px-3 py-3 rounded-xl text-red-600 hover:bg-red-50 transition-colors"
                       >
                         <LogOut size={16} />
                         Logout
@@ -290,7 +304,7 @@ const Navbar = () => {
                   !mobileMenuOpen
                 )
               }
-              className="md:hidden h-10 w-10 flex items-center justify-center rounded-lg border border-slate-200"
+              className="md:hidden h-10 w-10 flex items-center justify-center rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors"
             >
               {mobileMenuOpen ? (
                 <X size={20} />
@@ -304,65 +318,85 @@ const Navbar = () => {
 
       {/* MOBILE DRAWER */}
       {mobileMenuOpen && (
-        <div className="fixed inset-0 z-40 bg-black/40 md:hidden">
-          <div className="absolute right-0 top-0 h-full w-80 bg-white shadow-2xl">
+        <div className="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm md:hidden">
+          <div className="absolute right-0 top-0 h-full w-80 bg-white shadow-2xl flex flex-col">
 
-            <div className="p-5 border-b">
-              <h3 className="font-bold text-lg">
+            <div className="p-5 border-b flex items-center justify-between">
+              <h3 className="font-bold text-lg text-slate-900">
                 Menu
               </h3>
+              <button
+                onClick={() => setMobileMenuOpen(false)}
+                className="h-9 w-9 flex items-center justify-center rounded-lg hover:bg-slate-100 transition-colors"
+              >
+                <X size={18} />
+              </button>
             </div>
 
-            <div className="p-4 space-y-2">
+            {user && (
+              <div className="p-5 border-b bg-linear-to-br from-indigo-50/60 to-transparent">
+                <div className="flex items-center gap-3">
+                  <div className="h-10 w-10 rounded-full bg-linear-to-br from-indigo-500 to-indigo-700 text-white font-semibold flex items-center justify-center shrink-0 shadow-sm">
+                    {initial}
+                  </div>
+                  <div className="min-w-0">
+                    <p className="font-medium text-slate-900 truncate text-sm">{user.email}</p>
+                    <p className="text-xs text-slate-500 capitalize mt-0.5">{user.role}</p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            <div className="p-4 space-y-1 overflow-y-auto flex-1">
 
               {!user ? (
                 <>
                   <a
                     href="/#about"
-                    className="block px-4 py-3 rounded-xl hover:bg-slate-100"
+                    className="block px-4 py-3 rounded-xl text-slate-700 font-medium hover:bg-slate-100 transition-colors"
                   >
                     About
                   </a>
 
                   <a
                     href="/#features"
-                    className="block px-4 py-3 rounded-xl hover:bg-slate-100"
+                    className="block px-4 py-3 rounded-xl text-slate-700 font-medium hover:bg-slate-100 transition-colors"
                   >
                     Features
                   </a>
 
                   <a
                     href="/#fields"
-                    className="block px-4 py-3 rounded-xl hover:bg-slate-100"
+                    className="block px-4 py-3 rounded-xl text-slate-700 font-medium hover:bg-slate-100 transition-colors"
                   >
                     Skills
                   </a>
 
                   <a
                     href="/#companies"
-                    className="block px-4 py-3 rounded-xl hover:bg-slate-100"
+                    className="block px-4 py-3 rounded-xl text-slate-700 font-medium hover:bg-slate-100 transition-colors"
                   >
                     Companies
                   </a>
 
                   <Link
                     to="/all-jobs"
-                    className="block px-4 py-3 rounded-xl hover:bg-slate-100"
+                    className="block px-4 py-3 rounded-xl text-slate-700 font-medium hover:bg-slate-100 transition-colors"
                   >
                     Jobs
                   </Link>
 
-                  <div className="pt-4 border-t">
+                  <div className="pt-4 mt-4 border-t space-y-3">
                     <Link
                       to="/login"
-                      className="block text-center border border-slate-200 rounded-xl py-3"
+                      className="block text-center border border-slate-200 rounded-xl py-3 font-medium text-slate-700 hover:bg-slate-50 transition-colors"
                     >
                       Login
                     </Link>
 
                     <Link
                       to="/register"
-                      className="block text-center bg-indigo-600 text-white rounded-xl py-3 mt-3"
+                      className="block text-center bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl py-3 font-medium shadow-md shadow-indigo-200 transition-colors"
                     >
                       Get Started
                     </Link>
@@ -374,7 +408,11 @@ const Navbar = () => {
                     <Link
                       key={link.to}
                       to={link.to}
-                      className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-100"
+                      className={`flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-colors ${
+                        location.pathname === link.to
+                          ? "text-indigo-700 bg-indigo-50"
+                          : "text-slate-700 hover:bg-slate-100"
+                      }`}
                     >
                       {link.icon}
                       {link.label}
@@ -383,7 +421,7 @@ const Navbar = () => {
 
                   <button
                     onClick={onLogout}
-                    className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-red-600 hover:bg-red-50"
+                    className="w-full flex items-center gap-3 px-4 py-3 mt-2 rounded-xl text-red-600 font-medium hover:bg-red-50 transition-colors"
                   >
                     <LogOut size={16} />
                     Logout

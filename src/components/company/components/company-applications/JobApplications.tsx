@@ -126,6 +126,7 @@ const JobApplications = ({ job }: { job: Job }) => {
                 })}
             </div>
 
+            {/* no applications found  */}
             {
                 filteredApplications.length === 0 && (
                     <div className="bg-white rounded-3xl border border-slate-200 shadow-sm p-12 text-center">

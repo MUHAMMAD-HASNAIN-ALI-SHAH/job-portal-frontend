@@ -77,7 +77,7 @@ const AllJobs = () => {
         (employmentFilter !== "All" ? 1 : 0);
 
     return (
-        <div className="min-h-screen bg-slate-50 flex flex-col">
+        <div className="min-h-screen flex flex-col">
             <Navbar />
 
             {/* HERO */}

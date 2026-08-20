@@ -6,9 +6,11 @@ import { toast } from "react-toastify";
 import axiosInstance from "../../lib/axios";
 import readFileAsBase64 from "../../lib/base64";
 import type { Job } from "../../interfaces";
+import useAuthStore from "../../store/useAuthStore";
 
 
 const ApplyJobCard = ({ onClose, setSubmitted, job }: { onClose: () => void; setSubmitted: (submitted: boolean) => void; job: Job }) => {
+    const { isAuthenticated, user } = useAuthStore();
     const { applicant } = useApplicantStore();
     const [coverLetter, setCoverLetter] = useState("");
     const [expectedSalary, setExpectedSalary] = useState("");
@@ -53,6 +55,18 @@ const ApplyJobCard = ({ onClose, setSubmitted, job }: { onClose: () => void; set
         setErrors((prev) => ({ ...prev, submitError: undefined }));
 
         setIsSubmitting(true);
+
+        if (!isAuthenticated) {
+            toast.error("You must be logged in to apply for this job.");
+            setIsSubmitting(false);
+            return;
+        }
+
+        if(!user || user.role !== "applicant") {
+            toast.error("Only applicants can apply for jobs.");
+            setIsSubmitting(false);
+            return;
+        }
 
         try {
             const payload: {
@@ -119,11 +133,10 @@ const ApplyJobCard = ({ onClose, setSubmitted, job }: { onClose: () => void; set
                         </label>
                         <label
                             htmlFor="resume"
-                            className={`flex items-center gap-3 w-full rounded-lg border-2 border-dashed px-4 py-3.5 text-sm cursor-pointer transition-colors ${
-                                resume
-                                    ? "border-indigo-200 bg-indigo-50/50"
-                                    : "border-slate-300 hover:border-indigo-300 hover:bg-slate-50"
-                            } focus-within:ring-2 focus-within:ring-indigo-200 focus-within:border-indigo-500`}
+                            className={`flex items-center gap-3 w-full rounded-lg border-2 border-dashed px-4 py-3.5 text-sm cursor-pointer transition-colors ${resume
+                                ? "border-indigo-200 bg-indigo-50/50"
+                                : "border-slate-300 hover:border-indigo-300 hover:bg-slate-50"
+                                } focus-within:ring-2 focus-within:ring-indigo-200 focus-within:border-indigo-500`}
                         >
                             {resume ? (
                                 <FileText className="h-5 w-5 text-indigo-600 shrink-0" />

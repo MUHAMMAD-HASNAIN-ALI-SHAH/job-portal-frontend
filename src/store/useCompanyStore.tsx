@@ -49,7 +49,7 @@ const useCompanyStore = create<CompanyState>((set) => ({
     try {
       set({ company: data as CompanyInterface });
     } catch (error: any) {
-      toast.error(error.response?.data?.msg || "Failed to update company details");
+      toast.error(error.response?.data?.message || "Failed to update company details");
     }
   },
   getJobs: async () => {

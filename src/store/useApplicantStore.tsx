@@ -50,7 +50,7 @@ const useApplicantStore = create<ApplicantState>((set) => ({
     try {
       set({ applicant: data as Applicant });
     } catch (error: any) {
-      toast.error(error.response?.data?.msg || "Failed to update applicant details");
+      toast.error(error.response?.data?.message || "Failed to update applicant details");
     }
   },
   uploadResume: async (file) => {
@@ -72,7 +72,7 @@ const useApplicantStore = create<ApplicantState>((set) => ({
 
     } catch (err: any) {
       console.error("Resume upload failed:", err?.response?.data || err.message);
-      toast.error(err?.response?.data?.msg || "Failed to upload resume");
+      toast.error(err?.response?.data?.message || "Failed to upload resume");
     } finally {
       set({ resumeUploadLoader: false });
     }
@@ -100,7 +100,7 @@ const useApplicantStore = create<ApplicantState>((set) => ({
       toast.success("Resume deleted successfully");
     } catch (err: any) {
       console.error("Failed to delete resume:", err?.response?.data || err.message);
-      toast.error(err?.response?.data?.msg || "Failed to delete resume");
+      toast.error(err?.response?.data?.message || "Failed to delete resume");
     } finally {
       set({ deleteResumeLoader: false });
     }

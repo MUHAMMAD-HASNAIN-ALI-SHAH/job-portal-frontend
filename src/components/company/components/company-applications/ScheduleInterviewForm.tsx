@@ -28,8 +28,8 @@ const ScheduleInterviewForm = ({ application }: { application: any }) => {
                 applicationId: application._id,
                 status: "shortlisted",
                 interviewMode: mode,
-                interviewLocation: interviewLocation,
-                interviewZoomLink: zoomLink,
+                interviewLocation,
+                zoomLink,
                 interviewDate: date,
                 interviewTime: time,
             });
@@ -37,8 +37,8 @@ const ScheduleInterviewForm = ({ application }: { application: any }) => {
             editApplication(application._id, {
                 status: "shortlisted",
                 interviewMode: mode,
-                interviewLocation: interviewLocation,
-                zoomLink: zoomLink,
+                interviewLocation,
+                zoomLink,
                 interviewDate: date,
                 interviewTime: time,
             });
@@ -46,85 +46,108 @@ const ScheduleInterviewForm = ({ application }: { application: any }) => {
             toast.success("Application shortlisted and interview scheduled.");
         } catch (error: any) {
             console.error("Failed to schedule interview:", error);
-            toast.error(error.response?.data?.message || "Failed to schedule interview.");
+            toast.error(
+                error.response?.data?.message ||
+                "Failed to schedule interview."
+            );
         } finally {
             setIsSaving(false);
         }
     };
 
     return (
-        <div className="flex flex-col gap-3 w-full">
-            <div className="border-t border-slate-100 bg-slate-50 p-5">
-                <div className="flex flex-col md:flex-row md:items-center gap-3">
-                    <div className="relative">
-                        <Calendar className="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 pointer-events-none" />
+        <div className="w-full border-t border-slate-200 bg-slate-50 p-4 rounded-b-xl">
+            <div className="flex flex-col gap-3 w-full">
+
+                {/* Date & Time */}
+                <div className="flex flex-col md:flex-row gap-3 w-full">
+                    <div className="relative w-full">
+                        <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 pointer-events-none" />
                         <input
                             value={date}
                             onChange={(e) => setDate(e.target.value)}
                             type="date"
-                            className="pl-8 rounded-md border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-200 focus:border-indigo-500"
+                            className="w-full pl-10 rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm outline-none focus:ring-2 focus:ring-indigo-200 focus:border-indigo-500"
                         />
                     </div>
 
-                    <div className="relative">
-                        <Clock className="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 pointer-events-none" />
+                    <div className="relative w-full">
+                        <Clock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 pointer-events-none" />
                         <input
                             value={time}
                             onChange={(e) => setTime(e.target.value)}
                             type="time"
-                            className="pl-8 rounded-md border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-200 focus:border-indigo-500"
+                            className="w-full pl-10 rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm outline-none focus:ring-2 focus:ring-indigo-200 focus:border-indigo-500"
                         />
                     </div>
+                </div>
 
+                {/* Mode & Details */}
+                <div className="flex flex-col md:flex-row gap-3 w-full">
                     <select
                         value={mode}
-                        onChange={(e) => setMode(e.target.value as "in-person" | "online" | "phone")}
-                        className="rounded-md border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-200 focus:border-indigo-500"
+                        onChange={(e) =>
+                            setMode(
+                                e.target.value as
+                                | "in-person"
+                                | "online"
+                                | "phone"
+                            )
+                        }
+                        className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm outline-none focus:ring-2 focus:ring-indigo-200 focus:border-indigo-500"
                     >
-                        <option value="in-person">In-Person</option>
-                        <option value="online">Online</option>
-                        <option value="phone">Phone</option>
+                        <option value="in-person">📍 In-Person</option>
+                        <option value="online">💻 Online</option>
+                        <option value="phone">📞 Phone</option>
                     </select>
 
                     {mode === "in-person" && (
-                        <div className="relative flex-1">
-                            <MapPin className="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 pointer-events-none" />
+                        <div className="relative w-full">
+                            <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 pointer-events-none" />
                             <input
                                 value={interviewLocation}
-                                onChange={(e) => setInterviewLocation(e.target.value)}
+                                onChange={(e) =>
+                                    setInterviewLocation(e.target.value)
+                                }
                                 type="text"
                                 placeholder="Interview location"
-                                className="w-full pl-8 rounded-md border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-200 focus:border-indigo-500"
+                                className="w-full pl-10 rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm outline-none focus:ring-2 focus:ring-indigo-200 focus:border-indigo-500"
                             />
                         </div>
                     )}
+
                     {mode === "online" && (
-                        <div className="relative flex-1">
-                            <Video className="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 pointer-events-none" />
+                        <div className="relative w-full">
+                            <Video className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 pointer-events-none" />
                             <input
                                 value={zoomLink}
                                 onChange={(e) => setZoomLink(e.target.value)}
                                 type="text"
                                 placeholder="Interview link"
-                                className="w-full pl-8 rounded-md border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-200 focus:border-indigo-500"
+                                className="w-full pl-10 rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm outline-none focus:ring-2 focus:ring-indigo-200 focus:border-indigo-500"
                             />
                         </div>
                     )}
+
                     {mode === "phone" && (
-                        <div className="flex items-center gap-1.5 text-sm text-slate-500 px-1">
-                            <Phone className="h-4 w-4" /> Applicant will be called directly
+                        <div className="w-full flex items-center rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-600">
+                            <Phone className="h-4 w-4 mr-2 text-slate-500" />
+                            Applicant will be called directly
                         </div>
                     )}
-
-                    <button
-                        onClick={handleSubmit}
-                        disabled={isSaving}
-                        className="flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-400 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors shrink-0"
-                    >
-                        {isSaving && <span className="h-3.5 w-3.5 border-2 border-white/40 border-t-white rounded-full animate-spin" />}
-                        {isSaving ? "Saving..." : "Save"}
-                    </button>
                 </div>
+
+                <button
+                    onClick={handleSubmit}
+                    disabled={isSaving}
+                    className="w-full md:w-fit md:self-end flex items-center justify-center gap-2 rounded-lg bg-indigo-600 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-indigo-700 disabled:bg-indigo-400 disabled:cursor-not-allowed"
+                >
+                    {isSaving && (
+                        <span className="h-4 w-4 border-2 border-white/40 border-t-white rounded-full animate-spin" />
+                    )}
+                    {isSaving ? "Saving..." : "Schedule Interview"}
+                </button>
+
             </div>
         </div>
     );

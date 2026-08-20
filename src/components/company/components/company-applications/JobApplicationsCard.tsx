@@ -113,18 +113,21 @@ const JobApplicationsCard = ({ application }: { application: any }) => {
                             </div>
                         </div>
                         {(status === "hired" || status === "rejected") && application.status !== status &&
-                            <div className="flex w-full flex-end justify-end">
+                            <div className="flex w-full flex-end justify-end mt-3">
                                 <button
                                     type="button"
-                                    disabled={isSaving}
-                                    onClick={() => handleStatusChange(status === "hired" ? "hired" : "rejected")}
-                                    className={`inline-flex items-center justify-center rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 active:bg-indigo-800 transition-colors ${isSaving ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                    disabled={isSaving || application.status === status}
+                                    onClick={() => handleStatusChange(status)}
+                                    className={`inline-flex items-center justify-center rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 active:bg-indigo-800 transition-colors ${(isSaving || application.status === status) ? 'opacity-50 cursor-not-allowed' : ''}`}
                                 >
                                     {isSaving ? "Saving..." : "Save"}
                                 </button>
                             </div>
                         }
                     </div>
+
+                    {/* schedule interview form */}
+                    {showScheduleForm && <ScheduleInterviewForm application={application} />}
 
                     {/* ats match card */}
                     {(application.status === "applied" || application.status === "shortlisted") && <ATSMatchCard application={application} />}
@@ -142,9 +145,6 @@ const JobApplicationsCard = ({ application }: { application: any }) => {
                         </div>}
                         {resumePreviewOpen && <ResumePreview onClose={() => setResumePreviewOpen(false)} resumeFile={application.resumeId?.resumeUrl || ""} />}
                     </div>
-
-                    {/* schedule interview form */}
-                    {showScheduleForm && <ScheduleInterviewForm application={application} />}
 
                     {/* Expanded applications details */}
                     {expanded && <ExpandedApplicationDetails application={application} />}

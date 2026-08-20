@@ -36,7 +36,7 @@ const EmailVerification = () => {
       })
       .catch((error) => {
         const errMessage =
-          error.response?.data?.msg ||
+          error.response?.data?.message ||
           "Verification failed. The link may have expired.";
 
         setStatus("error");

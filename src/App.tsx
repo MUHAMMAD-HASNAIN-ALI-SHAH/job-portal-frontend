@@ -20,7 +20,7 @@ function App() {
   }, [verify]);
 
   return (
-    <div className="w-full">
+    <div className="w-full overflow-y-auto custom-scrollbar bg-gray-200">
       {isAuthenticatedLoading ? (
         <div className="min-h-screen flex items-center justify-center">
           <Loader2 className="w-12 h-12 animate-spin text-indigo-600" />
@@ -30,10 +30,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/all-jobs" element={<AllJobs />} />
-            <Route
-              path="/job/:id"
-              element={!isAuthenticated ? <Navigate to="/" /> : user?.role === "applicant" ? <JobDetails /> : <Navigate to="/all-jobs" />}
-            />
+            <Route path="/job/:id" element={<JobDetails />} />
             <Route
               path="/my-applications"
               element={!isAuthenticated ? <Navigate to="/" /> : user?.role === "applicant" ? <AppliedJobs /> : <Navigate to="/all-jobs" />}

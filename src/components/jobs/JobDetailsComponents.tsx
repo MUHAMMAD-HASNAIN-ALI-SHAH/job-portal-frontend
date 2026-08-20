@@ -89,12 +89,15 @@ const DetailStat = ({
 );
 
 export const JobDetailsCard = ({ job, alreadyApplied, setOpen }: { job: Job; alreadyApplied: boolean; setOpen: (open: boolean) => void }) => {
-  const { isAuthenticated } = useAuthStore();
-
+  const { isAuthenticated, user } = useAuthStore();
   const handleApply = () => {
     if (!job) return;
     if (!isAuthenticated) {
       toast.error("Please login to apply for this job.");
+      return;
+    }
+    if (!user || user.role !== "applicant") {
+      toast.error("Only applicants can apply for jobs.");
       return;
     }
     setOpen(true);
@@ -138,12 +141,27 @@ export const JobDetailsCard = ({ job, alreadyApplied, setOpen }: { job: Job; alr
 
           <button
             onClick={handleApply}
-            disabled={alreadyApplied}
-            className={`${
-              alreadyApplied ? "bg-slate-300 cursor-not-allowed" : "bg-indigo-600 hover:bg-indigo-700"
-            } w-full lg:w-auto text-white px-6 py-3 rounded-lg font-medium transition shrink-0`}
+            disabled={
+              alreadyApplied ||
+              !isAuthenticated ||
+              !user ||
+              user.role !== "applicant"
+            }
+            className={`${alreadyApplied ||
+              !isAuthenticated ||
+              !user ||
+              user.role !== "applicant"
+              ? "bg-slate-300 cursor-not-allowed"
+              : "bg-indigo-600 hover:bg-indigo-700"
+              } w-full lg:w-auto text-white px-6 py-3 rounded-lg font-medium transition shrink-0`}
           >
-            {alreadyApplied ? "Already Applied" : "Apply Now"}
+            {!isAuthenticated
+              ? "Login To Apply"
+              : user?.role !== "applicant"
+                ? "Only Applicants Can Apply"
+                : alreadyApplied
+                  ? "Already Applied"
+                  : "Apply For This Job"}
           </button>
         </div>
       </div>
@@ -218,12 +236,27 @@ export const JobDetailsCard = ({ job, alreadyApplied, setOpen }: { job: Job; alr
         <div className="pt-2">
           <button
             onClick={handleApply}
-            disabled={alreadyApplied}
-            className={`${
-              alreadyApplied ? "bg-slate-300 cursor-not-allowed" : "bg-indigo-600 hover:bg-indigo-700"
-            } w-full text-white py-3 rounded-lg font-medium transition`}
+            disabled={
+              alreadyApplied ||
+              !isAuthenticated ||
+              !user ||
+              user.role !== "applicant"
+            }
+            className={`${alreadyApplied ||
+                !isAuthenticated ||
+                !user ||
+                user.role !== "applicant"
+                ? "bg-slate-300 cursor-not-allowed"
+                : "bg-indigo-600 hover:bg-indigo-700"
+              } w-full text-white py-3 rounded-lg font-medium transition`}
           >
-            {alreadyApplied ? "Already Applied" : "Apply For This Job"}
+            {!isAuthenticated
+              ? "Login To Apply"
+              : user?.role !== "applicant"
+                ? "Only Applicants Can Apply"
+                : alreadyApplied
+                  ? "Already Applied"
+                  : "Apply For This Job"}
           </button>
         </div>
       </div>

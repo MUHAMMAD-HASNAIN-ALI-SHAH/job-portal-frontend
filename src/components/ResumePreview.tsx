@@ -7,10 +7,7 @@ const ResumePreview = ({ onClose, resumeFile }: { onClose: () => void; resumeFil
         : `${resumeFile}#toolbar=0&navpanes=0&scrollbar=0`;
 
     return (
-        <div
-            className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4"
-            onClick={onClose}
-        >
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
             <div
                 className="bg-white rounded-xl shadow-xl w-full max-w-2xl h-[90vh] flex flex-col overflow-auto custom-scrollbar"
                 onClick={(e) => e.stopPropagation()}
