@@ -21,7 +21,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import useSidebarStore from "../../store/useNavigationStore";
+import useSidebarStore from "../../store/useCompanyNavigationStore";
 
 const menuItems = [
   {

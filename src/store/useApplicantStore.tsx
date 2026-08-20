@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import type { Applicant, Application, ResumeData } from "../interfaces";
+import type { Applicant, Application } from "../interfaces";
 import axiosInstance from "../lib/axios";
 import { toast } from "react-toastify";
 import readFileAsBase64 from "../lib/base64";
@@ -7,7 +7,6 @@ import readFileAsBase64 from "../lib/base64";
 interface ApplicantState {
   // States
   applicant: Applicant | null;
-  resume: ResumeData | null;
   applications: Application[];
 
   // loaders
@@ -20,7 +19,6 @@ interface ApplicantState {
   // Methods
   getApplicantDetails: () => Promise<void>;
   updateApplicantDetails: (data: Partial<Applicant>) => Promise<void>;
-  getUserResume: () => Promise<void>;
   uploadResume: (file: File) => Promise<void>;
   getMyApplications: () => Promise<void>;
   deleteResume: () => Promise<void>;
@@ -55,40 +53,20 @@ const useApplicantStore = create<ApplicantState>((set) => ({
       toast.error(error.response?.data?.msg || "Failed to update applicant details");
     }
   },
-  getUserResume: async () => {
-    try {
-      set({ getResumeLoader: true });
-      const res = await axiosInstance.get("/api/v5/resume");
-
-      if (res.data) {
-        set({
-          resume: {
-            resumeUrl: res.data.resumeUrl,
-            fileName: res.data.fileName || "resume.pdf",
-          }
-        });
-      }
-    } catch (err: any) {
-      console.error("Failed to fetch resume:", err?.response?.data || err.message);
-    } finally {
-      set({ getResumeLoader: false });
-    }
-  },
   uploadResume: async (file) => {
     try {
       set({ resumeUploadLoader: true });
       const base64 = await readFileAsBase64(file);
-      const res = await axiosInstance.put("/api/v5/resume", {
+      const res = await axiosInstance.put("/api/v3/applicant/resume", {
         resumeBase64: base64,
         fileName: file.name,
       });
 
-      set({
-        resume: {
-          resumeUrl: res.data.resumeUrl,
-          fileName: res.data.fileName,
-        }
-      });
+      set((state) => ({
+        applicant: state.applicant
+          ? { ...state.applicant, resumeId: res.data }
+          : state.applicant,
+      }));
 
       toast.success("Resume uploaded successfully");
 
@@ -113,8 +91,12 @@ const useApplicantStore = create<ApplicantState>((set) => ({
   deleteResume: async () => {
     try {
       set({ deleteResumeLoader: true });
-      await axiosInstance.delete("/api/v5/resume");
-      set({ resume: null });
+      await axiosInstance.delete("/api/v3/applicant/resume");
+      set((state) => ({
+        applicant: state.applicant
+          ? { ...state.applicant, resumeId: null }
+          : state.applicant,
+      }));
       toast.success("Resume deleted successfully");
     } catch (err: any) {
       console.error("Failed to delete resume:", err?.response?.data || err.message);

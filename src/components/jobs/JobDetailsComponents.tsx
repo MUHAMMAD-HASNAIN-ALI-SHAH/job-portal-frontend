@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router-dom";
 import type { Job } from "../../interfaces";
 import useAuthStore from "../../store/useAuthStore";
 import { toast } from "react-toastify";
@@ -89,8 +88,7 @@ const DetailStat = ({
   </div>
 );
 
-export const JobDetailsCard = ({ job, alreadyApplied }: { job: Job; alreadyApplied: boolean }) => {
-  const navigate = useNavigate();
+export const JobDetailsCard = ({ job, alreadyApplied, setOpen }: { job: Job; alreadyApplied: boolean; setOpen: (open: boolean) => void }) => {
   const { isAuthenticated } = useAuthStore();
 
   const handleApply = () => {
@@ -99,7 +97,7 @@ export const JobDetailsCard = ({ job, alreadyApplied }: { job: Job; alreadyAppli
       toast.error("Please login to apply for this job.");
       return;
     }
-    navigate(`/job/${job._id}/apply`);
+    setOpen(true);
   };
 
   return (

@@ -3,7 +3,7 @@ import type { CompanyInterface } from "../../../../interfaces";
 import axiosInstance from "../../../../lib/axios";
 import { toast } from "react-toastify";
 import useCompanyStore from "../../../../store/useCompanyStore";
-import useNavigationStore from "../../../../store/useNavigationStore";
+import useCompanyNavigationStore from "../../../../store/useCompanyNavigationStore";
 
 const INDUSTRY_OPTIONS = ["IT", "Finance", "Healthcare", "Education", "Marketing", "Sales", "Other"];
 const SIZE_OPTIONS = ["1-10", "11-50", "51-200", "201-500", "501-1000", "1001-5000", "5001-10000", "10000+"];
@@ -34,7 +34,7 @@ const CompanyProfileForm = () => {
             about: "",
         }
     );
-    const { setEditCompanyProfile } = useNavigationStore();
+    const { setEditCompanyProfile } = useCompanyNavigationStore();
 
     const handleChange = (
         e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>

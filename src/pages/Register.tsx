@@ -137,7 +137,7 @@ const Registration = () => {
                     }`}
                 >
                   🧑‍💼
-                  <span className="block mt-1">Application</span>
+                  <span className="block mt-1">Applicant</span>
                 </button>
               </div>
               {errors.role && (

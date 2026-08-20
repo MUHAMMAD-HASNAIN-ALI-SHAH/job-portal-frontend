@@ -2,11 +2,11 @@ import { toast } from "react-toastify";
 import type { Job } from "../../../../interfaces"
 import axiosInstance from "../../../../lib/axios";
 import useCompanyStore from "../../../../store/useCompanyStore";
-import useNavigationStore from "../../../../store/useNavigationStore";
+import useCompanyNavigationStore from "../../../../store/useCompanyNavigationStore";
 import { useState } from "react";
 
 const JobCard = ({ job, styles }: { job: Job, styles: any }) => {
-    const { setEditJobId } = useNavigationStore();
+    const { setEditJobId } = useCompanyNavigationStore();
     const { deleteJob } = useCompanyStore();
     const [isDeleting, setIsDeleting] = useState(false);
 
@@ -22,6 +22,7 @@ const JobCard = ({ job, styles }: { job: Job, styles: any }) => {
         }
         setIsDeleting(false);
     };
+
     return (
         <div key={job._id} className={`bg-white border border-slate-100 border-l-4 ${styles.accent} rounded-xl p-5 hover:shadow-md transition-all transform hover:scale-[1.01]`}>
             <div className="flex items-start justify-between gap-2 mb-3">

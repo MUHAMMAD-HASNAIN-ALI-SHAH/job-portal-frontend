@@ -1,9 +1,9 @@
 import useCompanyStore from "../../../store/useCompanyStore";
-import useNavigationStore from "../../../store/useNavigationStore";
-import { CompanyProfileSkeleton } from "./Skeleton";
+import useCompanyNavigationStore from "../../../store/useCompanyNavigationStore";
+import CompanyProfileSkeleton from "../skeletons/CompanyProfileSkeleton";
 
 const CompanyProfile = () => {
-    const { setEditCompanyProfile } = useNavigationStore();
+    const { setEditCompanyProfile } = useCompanyNavigationStore();
     const { company, getCompanyDetailsLoader } = useCompanyStore();
 
     return (

@@ -1,8 +1,8 @@
-import type { DashboardCandidate, DashboardJob, Job } from '../../../interfaces';
+import type { DashboardJob, Job } from '../../../interfaces';
 import useCompanyStore from '../../../store/useCompanyStore';
-import JobCard from './ui/JobCard';
-import useNavigationStore from '../../../store/useNavigationStore';
-import { CompanyDashboardSkeleton } from './Skeleton';
+import JobCard from '../components/company-jobs/JobCard';
+import useCompanyNavigationStore from '../../../store/useCompanyNavigationStore';
+import CompanyDashboardSkeleton from '../skeletons/CompanyDashboardSekeleton';
 
 const jobStatusStyles: Record<DashboardJob["status"], { accent: string; badge: string; iconBg: string }> = {
   Active: {
@@ -22,19 +22,9 @@ const jobStatusStyles: Record<DashboardJob["status"], { accent: string; badge: s
   },
 };
 
-const candidateStatusStyles: Record<DashboardCandidate["status"], string> = {
-  Applied: "bg-indigo-50 text-indigo-700",
-  Shortlisted: "bg-blue-50 text-blue-700",
-  Rejected: "bg-red-50 text-red-600",
-  Hired: "bg-green-50 text-green-700",
-};
-
-const getInitials = (name: string) =>
-  name.split(" ").map((w) => w[0]).slice(0, 2).join("").toUpperCase();
-
 const CompanyDashboard = () => {
   let { jobs, applications, getApplicationsLoader, getJobsLoader, getCompanyDetailsLoader } = useCompanyStore();
-  const { setSidebarMenu } = useNavigationStore();
+  const { setSidebarMenu } = useCompanyNavigationStore();
 
   if (getApplicationsLoader && getJobsLoader && getCompanyDetailsLoader) {
     return <CompanyDashboardSkeleton />;
@@ -109,40 +99,6 @@ const CompanyDashboard = () => {
               <JobCard key={job._id} job={job} styles={styles} />
             );
           })}
-        </div>
-      </div>
-
-      {/* Recent candidates — list rows */}
-      <div className="bg-white border border-slate-100 rounded-xl overflow-hidden">
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100">
-          <h2 className="text-sm font-semibold text-slate-900">Recent candidates</h2>
-        </div>
-
-        <div className="divide-y divide-slate-100">
-          {applications && applications.map((app) => (
-            <div key={app._id} className="flex items-center justify-between gap-4 px-6 py-4 hover:bg-slate-50 transition-colors">
-              <div className="flex items-center gap-3 min-w-0">
-                {(() => {
-                  const applicantName = typeof app.applicantId === 'string' ? app.applicantId : app.applicantId?.fullName ?? '';
-                  return (
-                    <div className="h-9 w-9 rounded-full bg-indigo-50 text-indigo-700 text-xs font-semibold flex items-center justify-center shrink-0">
-                      {getInitials(applicantName)}
-                    </div>
-                  );
-                })()}
-                <div className="min-w-0">
-                  <p className="text-sm font-medium text-slate-900 truncate">{typeof app.applicantId === 'string' ? app.applicantId : app.applicantId?.fullName}</p>
-                  <p className="text-xs text-slate-500 truncate">
-                    Applied for {app.jobId.title} · {app.createdAt}
-                  </p>
-                </div>
-              </div>
-
-              <span className={`text-xs font-medium px-2.5 py-1 rounded-full shrink-0 ${candidateStatusStyles[app.status.charAt(0).toUpperCase() + app.status.slice(1) as DashboardCandidate["status"]]}`}>
-                {app.status.charAt(0).toUpperCase() + app.status.slice(1)}
-              </span>
-            </div>
-          ))}
         </div>
       </div>
     </div>

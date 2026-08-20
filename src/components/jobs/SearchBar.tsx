@@ -22,7 +22,6 @@ interface SearchBarProps {
 }
 
 const SearchBar = ({ handleSearch, query, setQuery, selectedCity, setSelectedCity }: SearchBarProps) => {
-
     return (
         <div className="w-full sticky top-20 z-30">
             <div className="w-full max-w-7xl px-4 sm:px-6 mx-auto bg-slate-50">

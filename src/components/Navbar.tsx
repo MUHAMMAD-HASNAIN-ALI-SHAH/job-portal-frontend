@@ -10,7 +10,6 @@ import {
   LogOut,
   LayoutDashboard,
   FileText,
-  Building2,
   Search,
 } from "lucide-react";
 

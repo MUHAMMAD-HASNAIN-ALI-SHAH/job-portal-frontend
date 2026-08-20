@@ -1,21 +1,12 @@
 import { useState, type FormEvent, type KeyboardEvent } from "react";
 import { toast } from "react-toastify";
 import type { EmploymentType, ExperienceLevel, JobForm } from "../../../interfaces";
+import useCompanyNavigationStore from "../../../store/useCompanyNavigationStore";
 import axiosInstance from "../../../lib/axios";
-import useNavigationStore from "../../../store/useNavigationStore";
 import useCompanyStore from "../../../store/useCompanyStore";
 
 const EXPERIENCE_OPTIONS: ExperienceLevel[] = ["Internship", "Entry", "Mid", "Senior", "Lead"];
 const EMPLOYMENT_OPTIONS: EmploymentType[] = ["Full-time", "Part-time", "Contract", "Freelance", "Temporary"];
-
-interface FormErrors {
-  title?: string;
-  description?: string;
-  requirements?: string;
-  skills?: string;
-  applicationDeadline?: string;
-  saveError?: string;
-}
 
 const INITIAL_FORM: JobForm = {
   title: "",
@@ -109,10 +100,8 @@ const TagInput = ({
 
 const CompanyAddJob = () => {
   const [formData, setFormData] = useState<JobForm>(INITIAL_FORM);
-  const [errors, setErrors] = useState<FormErrors>({});
   const [isSaving, setIsSaving] = useState(false);
-  const [success, setSuccess] = useState(false);
-  const { setSidebarMenu } = useNavigationStore();
+  const { setSidebarMenu } = useCompanyNavigationStore();
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
@@ -123,76 +112,34 @@ const CompanyAddJob = () => {
       ...prev,
       [name]: type === "checkbox" ? checked : value,
     }));
-    if (errors[name as keyof FormErrors]) {
-      setErrors((prev) => ({ ...prev, [name]: undefined }));
-    }
-  };
-
-  const validate = (): boolean => {
-    const nextErrors: FormErrors = {};
-
-    if (!formData.title.trim()) {
-      nextErrors.title = "Job title is required.";
-    } else if (formData.title.length > 100) {
-      nextErrors.title = "Title must be under 100 characters.";
-    }
-
-    if (!formData.description.trim()) {
-      nextErrors.description = "Job description is required.";
-    } else if (formData.description.length > 5000) {
-      nextErrors.description = "Description must be under 5000 characters.";
-    }
-
-    if (formData.requirements.length === 0) {
-      nextErrors.requirements = "Add at least one requirement.";
-    }
-
-    if (formData.skills.length === 0) {
-      nextErrors.skills = "Add at least one skill.";
-    }
-
-    if (formData.applicationDeadline) {
-      const deadline = new Date(formData.applicationDeadline);
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-      if (deadline < today) {
-        nextErrors.applicationDeadline = "Deadline can't be in the past.";
-      }
-    }
-
-    setErrors(nextErrors);
-    return Object.keys(nextErrors).length === 0;
   };
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    setSuccess(false);
-    setErrors((prev) => ({ ...prev, saveError: undefined }));
-
-    if (!validate()) return;
-
-    setIsSaving(true);
 
     try {
+      setIsSaving(true);
+
       const payload = {
         ...formData,
-        applicationDeadline: formData.applicationDeadline || null,
-        status: formData.status || "draft",
       };
 
+      console.log("Submitting job:", payload);
+
       const res = await axiosInstance.post("/api/v4/job", payload);
+
       toast.success("Job posted successfully");
 
-      setSuccess(true);
       setFormData(INITIAL_FORM);
+
       useCompanyStore.getState().addJob(res.data);
+
       setSidebarMenu("my-jobs");
     } catch (error: any) {
-      toast.error(error?.response?.data?.msg || "Failed to post job. Please try again.");
-      const message =
-        error?.response?.data?.message || "Failed to post job. Please try again.";
-      setErrors((prev) => ({ ...prev, saveError: message }));
-      console.error("Job posting failed:", error?.response?.data || error.message);
+      toast.error(
+        error?.response?.data?.message ||
+        "Failed to post job"
+      );
     } finally {
       setIsSaving(false);
     }
@@ -210,18 +157,6 @@ const CompanyAddJob = () => {
           </div>
 
           <form onSubmit={handleSubmit} noValidate className="space-y-5">
-            {errors.saveError && (
-              <div className="bg-red-50 border border-red-200 text-red-600 text-sm rounded-md px-3 py-2 text-left">
-                {errors.saveError}
-              </div>
-            )}
-
-            {success && (
-              <div className="bg-green-50 border border-green-200 text-green-700 text-sm rounded-md px-3 py-2 text-left">
-                Job posted successfully!
-              </div>
-            )}
-
             {/* Title */}
             <div className="text-left">
               <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-1">
@@ -233,13 +168,9 @@ const CompanyAddJob = () => {
                 value={formData.title}
                 onChange={handleChange}
                 placeholder="e.g. Senior Frontend Engineer"
-                className={`w-full rounded-md border px-3 py-2 text-sm outline-none transition-colors focus:ring-2 ${errors.title
-                  ? "border-red-400 focus:ring-red-200"
-                  : "border-gray-300 focus:ring-indigo-200 focus:border-indigo-500"
-                  }`}
+                className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-200 focus:border-indigo-500"
               />
               <div className="flex justify-between mt-1">
-                {errors.title && <p className="text-red-500 text-xs">{errors.title}</p>}
                 <p className="text-xs text-gray-400 ml-auto">{formData.title.length}/100</p>
               </div>
             </div>
@@ -256,13 +187,9 @@ const CompanyAddJob = () => {
                 value={formData.description}
                 onChange={handleChange}
                 placeholder="Describe the role, responsibilities, and what a good day looks like..."
-                className={`w-full rounded-md border px-3 py-2 text-sm outline-none transition-colors focus:ring-2 resize-none ${errors.description
-                  ? "border-red-400 focus:ring-red-200"
-                  : "border-gray-300 focus:ring-indigo-200 focus:border-indigo-500"
-                  }`}
+                className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-200 focus:border-indigo-500"
               />
               <div className="flex justify-between mt-1">
-                {errors.description && <p className="text-red-500 text-xs">{errors.description}</p>}
                 <p className="text-xs text-gray-400 ml-auto">{formData.description.length}/5000</p>
               </div>
             </div>
@@ -274,9 +201,7 @@ const CompanyAddJob = () => {
               values={formData.requirements}
               onChange={(next) => {
                 setFormData((prev) => ({ ...prev, requirements: next }));
-                if (errors.requirements) setErrors((prev) => ({ ...prev, requirements: undefined }));
               }}
-              error={errors.requirements}
             />
 
             {/* Skills */}
@@ -286,9 +211,7 @@ const CompanyAddJob = () => {
               values={formData.skills}
               onChange={(next) => {
                 setFormData((prev) => ({ ...prev, skills: next }));
-                if (errors.skills) setErrors((prev) => ({ ...prev, skills: undefined }));
               }}
-              error={errors.skills}
             />
 
             {/* Experience level + Employment type */}
@@ -371,14 +294,8 @@ const CompanyAddJob = () => {
                 value={formData.applicationDeadline}
                 onChange={handleChange}
                 min={new Date().toISOString().split("T")[0]}
-                className={`w-full rounded-md border px-3 py-2 text-sm outline-none transition-colors focus:ring-2 ${errors.applicationDeadline
-                  ? "border-red-400 focus:ring-red-200"
-                  : "border-gray-300 focus:ring-indigo-200 focus:border-indigo-500"
-                  }`}
+                className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-indigo-200 focus:border-indigo-500"
               />
-              {errors.applicationDeadline && (
-                <p className="text-red-500 text-xs mt-1">{errors.applicationDeadline}</p>
-              )}
             </div>
 
             {/* Publish toggle */}

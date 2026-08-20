@@ -10,7 +10,6 @@ import Dashboard from "./pages/Dashboard";
 import Profile from "./pages/Profile";
 import AllJobs from "./pages/AllJobs";
 import JobDetails from "./pages/JobDetails";
-import ApplyJob from "./pages/ApplyJob";
 import AppliedJobs from "./pages/AppliedJobs";
 
 function App() {
@@ -40,10 +39,6 @@ function App() {
               element={!isAuthenticated ? <Navigate to="/" /> : user?.role === "applicant" ? <AppliedJobs /> : <Navigate to="/all-jobs" />}
             />
             <Route path="/verify-email" element={<EmailVerification />} />
-            <Route
-              path="/job/:id/apply"
-              element={!isAuthenticated ? <Navigate to="/" /> : user?.role === "applicant" ? <ApplyJob /> : <Navigate to="/all-jobs" />}
-            />
             <Route
               path="/profile"
               element={!isAuthenticated ? <Navigate to="/" /> : user?.role === "applicant" ? <Profile /> : <Navigate to="/" />}

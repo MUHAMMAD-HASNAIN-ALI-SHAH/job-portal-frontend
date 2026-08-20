@@ -6,6 +6,7 @@ import { JobDetailsCard, JobDetailsSkeleton } from "../components/jobs/JobDetail
 import { ArrowLeft, SearchX } from "lucide-react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import ApplyJobCard from "../components/apply/ApplyJobCard";
 
 const JobDetails = () => {
   const { id } = useParams();
@@ -14,6 +15,7 @@ const JobDetails = () => {
   const [alreadyApplied, setAlreadyApplied] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     if (!id) return;
@@ -76,8 +78,9 @@ const JobDetails = () => {
           <ArrowLeft size={18} />
           Back to Jobs
         </button>
-        <JobDetailsCard job={job} alreadyApplied={alreadyApplied} />
+        <JobDetailsCard job={job} alreadyApplied={alreadyApplied} setOpen={setOpen} />
       </div>
+      {open && <ApplyJobCard onClose={() => setOpen(false)} setSubmitted={() => setAlreadyApplied(true)} job={job} />}
       <Footer />
     </>
   );

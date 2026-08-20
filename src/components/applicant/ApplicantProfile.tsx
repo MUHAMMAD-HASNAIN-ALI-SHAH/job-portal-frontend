@@ -49,11 +49,11 @@ const ApplicantProfile = () => {
                             <div className="mt-4 max-w-sm">
                                 <div className="flex justify-between text-xs mb-1">
                                     <span>Profile Status</span>
-                                    <span>Complete</span>
+                                    <span>{Math.round(applicant?.profileCompleteness ?? 0)}%</span>
                                 </div>
 
                                 <div className="h-2 bg-white/20 rounded-full overflow-hidden">
-                                    <div className="h-full w-full bg-white rounded-full" />
+                                    <div className="h-2 bg-white rounded-full transition-all duration-300" style={{ width: `${applicant?.profileCompleteness ?? 0}%` }}></div>
                                 </div>
                             </div>
                         </div>

@@ -24,6 +24,10 @@ export interface Applicant {
   noticePeriod: number;
   profileCompleteness: number;
   savedJobs: string[];
+  resumeId: {
+    resumeUrl: string;
+    fileName: string;
+  } | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -126,7 +130,10 @@ export interface Application {
     title: string;
   };
   status: "applied" | "shortlisted" | "rejected" | "hired";
-  resume: string;
+  resumeId: {
+    resumeUrl: string;
+    fileName: string;
+  } | null;
   coverLetter: string;
   noticePeriod: number;
   expectedSalary: number;
@@ -135,6 +142,7 @@ export interface Application {
   interviewMode: "in-person" | "online" | "phone" | null;
   zoomLink: string | null;
   interviewLocation: string | null;
+  atsMatchPercentage: number | null;
   createdAt: string;
   updatedAt: string;
 }

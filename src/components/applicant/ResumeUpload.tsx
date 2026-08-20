@@ -9,7 +9,7 @@ import {
     View,
 } from "lucide-react";
 import useApplicantStore from "../../store/useApplicantStore";
-import ResumePreview from "./ResumePreview";
+import ResumePreview from "../ResumePreview";
 
 const MAX_SIZE_MB = 1;
 const ACCEPTED_TYPES = [".pdf"];
@@ -24,11 +24,11 @@ const ResumeUpload = () => {
 
     const {
         getResumeLoader,
-        resume,
         uploadResume,
         resumeUploadLoader,
         deleteResume,
         deleteResumeLoader,
+        applicant
     } = useApplicantStore();
 
     // Close the menu when clicking anywhere outside of it
@@ -137,10 +137,10 @@ const ResumeUpload = () => {
 
                                         <div className="min-w-0">
                                             <h3 onClick={() => setResumePreviewOpen(true)} className="font-semibold truncate text-blue-500 hover:underline select-none cursor-pointer">
-                                                {resume?.fileName}
+                                                {applicant?.resumeId?.fileName}
                                             </h3>
                                             <p className="text-sm text-slate-500">
-                                                {resume ? "Uploaded" : "No resume uploaded"}
+                                                {applicant?.resumeId ? "Uploaded" : "No resume uploaded"}
                                             </p>
                                         </div>
                                     </div>
@@ -158,12 +158,13 @@ const ResumeUpload = () => {
 
                                         {menuOpen && (
                                             <div className="absolute right-0 mt-2 w-44 bg-white border border-slate-200 rounded-xl shadow-lg py-1 z-50">
-                                                {resume?.resumeUrl && (
+                                                {applicant?.resumeId?.resumeUrl && (
                                                     <button
                                                         type="button"
                                                         onClick={() => {
                                                             setMenuOpen(false);
-                                                            window.open(resume?.resumeUrl, "_blank");
+                                                            resumePreviewOpen ? setResumePreviewOpen(false) : setResumePreviewOpen(true);
+                                                            // window.open(applicant?.resumeId?.resumeUrl, "_blank");
                                                         }}
                                                         className="w-full cursor-pointer flex items-center gap-2 px-4 py-2 text-sm text-slate-700 hover:bg-slate-100"
                                                     >
@@ -180,9 +181,9 @@ const ResumeUpload = () => {
                                                     className="w-full cursor-pointer flex items-center gap-2 px-4 py-2 text-sm text-slate-700 hover:bg-slate-100"
                                                 >
                                                     <Pencil className="h-4 w-4" />
-                                                    {resume?.resumeUrl ? "Update Resume" : "Upload Resume"}
+                                                    {applicant?.resumeId?.resumeUrl ? "Update Resume" : "Upload Resume"}
                                                 </button>
-                                                {resume?.resumeUrl && (
+                                                {applicant?.resumeId?.resumeUrl && (
                                                     <button
                                                         type="button"
                                                         onClick={() => {
@@ -223,7 +224,7 @@ const ResumeUpload = () => {
                     </div>
                 </div>
             </div>
-            {resumePreviewOpen && <ResumePreview onClose={() => setResumePreviewOpen(false)} resumeFile={resume?.resumeUrl || ""} />}
+            {resumePreviewOpen && <ResumePreview onClose={() => setResumePreviewOpen(false)} resumeFile={applicant?.resumeId?.resumeUrl || ""} />}
         </div>
     );
 };
