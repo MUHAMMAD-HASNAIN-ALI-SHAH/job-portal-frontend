@@ -94,7 +94,7 @@ const Navbar = () => {
 
   return (
     <>
-      <header className="sticky top-0 z-50 border-b border-slate-200/60 bg-white/90 backdrop-blur-xl">
+      <header className="fixed w-full top-0 z-50 border-b border-slate-200/60 bg-white/90 backdrop-blur-xl">
         <div className="max-w-7xl mx-auto h-16 px-4 sm:px-6 lg:px-8 flex items-center justify-between">
 
           {/* LOGO */}
@@ -120,21 +120,18 @@ const Navbar = () => {
           {!user && (
             <nav className="hidden lg:flex items-center gap-1 bg-slate-50 rounded-full px-1.5 py-1.5 border border-slate-100">
               <a
-                href="/#about"
                 className="text-sm font-medium text-slate-600 hover:text-indigo-600 hover:bg-white hover:shadow-sm px-3.5 py-1.5 rounded-full transition-all"
               >
                 About
               </a>
 
               <a
-                href="/#features"
                 className="text-sm font-medium text-slate-600 hover:text-indigo-600 hover:bg-white hover:shadow-sm px-3.5 py-1.5 rounded-full transition-all"
               >
                 Features
               </a>
 
               <a
-                href="/#fields"
                 className="text-sm font-medium text-slate-600 hover:text-indigo-600 hover:bg-white hover:shadow-sm px-3.5 py-1.5 rounded-full transition-all"
               >
                 Skills
@@ -152,14 +149,12 @@ const Navbar = () => {
               </Link>
 
               <a
-                href="/#companies"
                 className="text-sm font-medium text-slate-600 hover:text-indigo-600 hover:bg-white hover:shadow-sm px-3.5 py-1.5 rounded-full transition-all"
               >
                 Companies
               </a>
 
               <a
-                href="/#contact"
                 className="text-sm font-medium text-slate-600 hover:text-indigo-600 hover:bg-white hover:shadow-sm px-3.5 py-1.5 rounded-full transition-all"
               >
                 Contact
@@ -296,142 +291,9 @@ const Navbar = () => {
                 )}
               </div>
             )}
-
-            {/* MOBILE MENU */}
-            <button
-              onClick={() =>
-                setMobileMenuOpen(
-                  !mobileMenuOpen
-                )
-              }
-              className="md:hidden h-10 w-10 flex items-center justify-center rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors"
-            >
-              {mobileMenuOpen ? (
-                <X size={20} />
-              ) : (
-                <Menu size={20} />
-              )}
-            </button>
           </div>
         </div>
       </header>
-
-      {/* MOBILE DRAWER */}
-      {mobileMenuOpen && (
-        <div className="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm md:hidden">
-          <div className="absolute right-0 top-0 h-full w-80 bg-white shadow-2xl flex flex-col">
-
-            <div className="p-5 border-b flex items-center justify-between">
-              <h3 className="font-bold text-lg text-slate-900">
-                Menu
-              </h3>
-              <button
-                onClick={() => setMobileMenuOpen(false)}
-                className="h-9 w-9 flex items-center justify-center rounded-lg hover:bg-slate-100 transition-colors"
-              >
-                <X size={18} />
-              </button>
-            </div>
-
-            {user && (
-              <div className="p-5 border-b bg-linear-to-br from-indigo-50/60 to-transparent">
-                <div className="flex items-center gap-3">
-                  <div className="h-10 w-10 rounded-full bg-linear-to-br from-indigo-500 to-indigo-700 text-white font-semibold flex items-center justify-center shrink-0 shadow-sm">
-                    {initial}
-                  </div>
-                  <div className="min-w-0">
-                    <p className="font-medium text-slate-900 truncate text-sm">{user.email}</p>
-                    <p className="text-xs text-slate-500 capitalize mt-0.5">{user.role}</p>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            <div className="p-4 space-y-1 overflow-y-auto flex-1">
-
-              {!user ? (
-                <>
-                  <a
-                    href="/#about"
-                    className="block px-4 py-3 rounded-xl text-slate-700 font-medium hover:bg-slate-100 transition-colors"
-                  >
-                    About
-                  </a>
-
-                  <a
-                    href="/#features"
-                    className="block px-4 py-3 rounded-xl text-slate-700 font-medium hover:bg-slate-100 transition-colors"
-                  >
-                    Features
-                  </a>
-
-                  <a
-                    href="/#fields"
-                    className="block px-4 py-3 rounded-xl text-slate-700 font-medium hover:bg-slate-100 transition-colors"
-                  >
-                    Skills
-                  </a>
-
-                  <a
-                    href="/#companies"
-                    className="block px-4 py-3 rounded-xl text-slate-700 font-medium hover:bg-slate-100 transition-colors"
-                  >
-                    Companies
-                  </a>
-
-                  <Link
-                    to="/all-jobs"
-                    className="block px-4 py-3 rounded-xl text-slate-700 font-medium hover:bg-slate-100 transition-colors"
-                  >
-                    Jobs
-                  </Link>
-
-                  <div className="pt-4 mt-4 border-t space-y-3">
-                    <Link
-                      to="/login"
-                      className="block text-center border border-slate-200 rounded-xl py-3 font-medium text-slate-700 hover:bg-slate-50 transition-colors"
-                    >
-                      Login
-                    </Link>
-
-                    <Link
-                      to="/register"
-                      className="block text-center bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl py-3 font-medium shadow-md shadow-indigo-200 transition-colors"
-                    >
-                      Get Started
-                    </Link>
-                  </div>
-                </>
-              ) : (
-                <>
-                  {links.map((link) => (
-                    <Link
-                      key={link.to}
-                      to={link.to}
-                      className={`flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-colors ${
-                        location.pathname === link.to
-                          ? "text-indigo-700 bg-indigo-50"
-                          : "text-slate-700 hover:bg-slate-100"
-                      }`}
-                    >
-                      {link.icon}
-                      {link.label}
-                    </Link>
-                  ))}
-
-                  <button
-                    onClick={onLogout}
-                    className="w-full flex items-center gap-3 px-4 py-3 mt-2 rounded-xl text-red-600 font-medium hover:bg-red-50 transition-colors"
-                  >
-                    <LogOut size={16} />
-                    Logout
-                  </button>
-                </>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
     </>
   );
 };

@@ -208,7 +208,7 @@ const AppliedJobs = () => {
         <>
             <Navbar />
 
-            <div className="max-w-5xl mx-auto p-6">
+            <div className="max-w-5xl mx-auto p-6 mt-20">
                 <div className="mb-6">
                     <h1 className="text-2xl sm:text-3xl font-bold text-slate-900">My Applications</h1>
                     <p className="text-slate-500 mt-1">

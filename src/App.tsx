@@ -11,13 +11,22 @@ import Profile from "./pages/Profile";
 import AllJobs from "./pages/AllJobs";
 import JobDetails from "./pages/JobDetails";
 import AppliedJobs from "./pages/AppliedJobs";
+import useJobStore from "./store/useJobStore";
 
 function App() {
   const { verify, isAuthenticated, isAuthenticatedLoading, user } = useAuthStore();
+  const { jobs, getAllJobs } = useJobStore();
 
   useEffect(() => {
     verify();
   }, [verify]);
+
+  useEffect(() => {
+    if (jobs.length === 0) {
+      getAllJobs("", "All locations");
+    }
+  }, [getAllJobs]);
+
 
   return (
     <div className="w-full overflow-y-auto custom-scrollbar bg-gray-200">

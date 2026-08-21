@@ -9,8 +9,15 @@ import {
   Search,
   CheckCircle,
 } from "lucide-react";
+import useJobStore from "../store/useJobStore";
+import { JobCardSkeleton } from "../components/jobs/AllJobsItems";
+import JobCard from "../components/jobs/JobCard";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
+  const { jobs, getJobsLoader } = useJobStore();
+  const navigate = useNavigate();
+
   return (
     <>
       <Navbar />
@@ -43,7 +50,7 @@ const Home = () => {
 
               <div className="mt-10 flex flex-col sm:flex-row justify-center gap-4">
                 <a
-                  href="/register"
+                  onClick={() => navigate("/register")}
                   className="bg-white text-indigo-700 px-8 py-4 rounded-xl font-semibold hover:bg-indigo-50 transition"
                 >
                   Get Started
@@ -75,6 +82,61 @@ const Home = () => {
                 </div>
               </div>
 
+            </div>
+          </div>
+        </section>
+
+        {/* ================= LATEST JOBS ================= */}
+        <section className="py-24 bg-slate-50">
+          <div className="max-w-7xl mx-auto px-6">
+
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-12">
+              <div>
+                <h2 className="text-4xl font-bold text-slate-900">
+                  Latest Opportunities
+                </h2>
+                <p className="mt-3 text-slate-600">
+                  Discover the newest jobs from top companies.
+                </p>
+              </div>
+
+              <a
+                onClick={() => navigate("/all-jobs")}
+                className="inline-flex select-none cursor-pointer items-center gap-2 rounded-xl bg-indigo-600 px-5 py-3 text-white font-medium hover:bg-indigo-700 transition"
+              >
+                View All Jobs →
+              </a>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+              {getJobsLoader ? (
+                Array.from({ length: 6 }).map((_, i) => (
+                  <JobCardSkeleton key={i} />
+                ))
+              ) : jobs.length === 0 ? (
+                <div className="col-span-full bg-white border border-slate-200 rounded-xl p-12 text-center flex flex-col items-center">
+                  <div className="h-12 w-12 rounded-full bg-slate-50 flex items-center justify-center mb-3">
+                    <Briefcase className="h-6 w-6 text-slate-400" />
+                  </div>
+
+                  <h3 className="text-lg font-semibold text-slate-900">
+                    No jobs found
+                  </h3>
+
+                  <p className="text-sm text-slate-500 mt-1">
+                    We couldn't find any jobs matching your criteria.
+                  </p>
+                </div>
+              ) : (
+                jobs
+                  .slice(0, 6)
+                  .map((job: any) => (
+                    <JobCard
+                      key={job._id}
+                      job={job}
+                    />
+                  ))
+              )}
             </div>
           </div>
         </section>
@@ -288,14 +350,14 @@ const Home = () => {
 
             <div className="mt-8 flex flex-col sm:flex-row justify-center gap-4">
               <a
-                href="/register"
+                onClick={() => navigate("/register")}
                 className="bg-white text-indigo-700 px-8 py-4 rounded-xl font-semibold"
               >
                 Create Account
               </a>
 
               <a
-                href="/jobs"
+                onClick={() => navigate("/all-jobs")}
                 className="border border-white text-white px-8 py-4 rounded-xl hover:bg-white/10"
               >
                 Browse Jobs
