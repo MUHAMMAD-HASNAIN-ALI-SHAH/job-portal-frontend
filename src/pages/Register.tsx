@@ -24,7 +24,7 @@ const Registration = () => {
     await axiosInstance
       .post("/api/v1/auth/register", { email, password, role })
       .then(() => {
-        toast.success("Registration successful! Please check your email for verification.");
+        toast.success("Registration successful");
         setSuccess(true);
         setEmail("");
         setPassword("");

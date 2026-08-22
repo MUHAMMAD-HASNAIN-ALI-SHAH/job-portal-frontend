@@ -1,13 +1,15 @@
 import { useState } from "react";
 import type { CompanyInterface, Job } from "../../interfaces";
 
-const getInitials = (name: string) =>
+const getInitials = (name: string) => {
+  if(!name) return "N/A";
   name
     .split(" ")
     .map((w) => w[0])
     .slice(0, 2)
     .join("")
     .toUpperCase();
+}
 
 
 export const statusStyles: Record<Job["status"], string> = {

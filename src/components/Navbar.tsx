@@ -2,8 +2,6 @@ import { Link, useLocation } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
 import useAuthStore from "../store/useAuthStore";
 import {
-  Menu,
-  X,
   ChevronDown,
   Briefcase,
   User,
@@ -50,7 +48,6 @@ const Navbar = () => {
   const location = useLocation();
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -88,10 +85,6 @@ const Navbar = () => {
       );
   }, []);
 
-  useEffect(() => {
-    setMobileMenuOpen(false);
-  }, [location.pathname]);
-
   return (
     <>
       <header className="fixed w-full top-0 z-50 border-b border-slate-200/60 bg-white/90 backdrop-blur-xl">
@@ -120,18 +113,21 @@ const Navbar = () => {
           {!user && (
             <nav className="hidden lg:flex items-center gap-1 bg-slate-50 rounded-full px-1.5 py-1.5 border border-slate-100">
               <a
+              href="#about"
                 className="text-sm font-medium text-slate-600 hover:text-indigo-600 hover:bg-white hover:shadow-sm px-3.5 py-1.5 rounded-full transition-all"
               >
                 About
               </a>
 
               <a
+                href="#features"
                 className="text-sm font-medium text-slate-600 hover:text-indigo-600 hover:bg-white hover:shadow-sm px-3.5 py-1.5 rounded-full transition-all"
               >
                 Features
               </a>
 
               <a
+              href="#skills"
                 className="text-sm font-medium text-slate-600 hover:text-indigo-600 hover:bg-white hover:shadow-sm px-3.5 py-1.5 rounded-full transition-all"
               >
                 Skills
@@ -147,18 +143,6 @@ const Navbar = () => {
               >
                 Jobs
               </Link>
-
-              <a
-                className="text-sm font-medium text-slate-600 hover:text-indigo-600 hover:bg-white hover:shadow-sm px-3.5 py-1.5 rounded-full transition-all"
-              >
-                Companies
-              </a>
-
-              <a
-                className="text-sm font-medium text-slate-600 hover:text-indigo-600 hover:bg-white hover:shadow-sm px-3.5 py-1.5 rounded-full transition-all"
-              >
-                Contact
-              </a>
             </nav>
           )}
 

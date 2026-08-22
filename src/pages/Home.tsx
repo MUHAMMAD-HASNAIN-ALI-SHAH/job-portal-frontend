@@ -230,7 +230,7 @@ const Home = () => {
         </section>
 
         {/* ================= FEATURES ================= */}
-        <section className="py-24">
+        <section id="features" className="py-24">
           <div className="max-w-7xl mx-auto px-6">
 
             <h2 className="text-4xl font-bold text-center mb-14">
@@ -311,7 +311,7 @@ const Home = () => {
         </section>
 
         {/* ================= SKILLS ================= */}
-        <section id="fields" className="py-24">
+        <section id="skills" className="py-24">
           <div className="max-w-7xl mx-auto px-6 text-center">
 
             <h2 className="text-4xl font-bold mb-6">

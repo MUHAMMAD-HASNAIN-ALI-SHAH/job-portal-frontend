@@ -20,11 +20,11 @@ const useAuthStore = create<AuthState>((set) => ({
   user: null,
   isAuthenticated: false,
   isAuthenticatedLoading: true,
+  isLoadingLoader: false,
 
   // Methods
   login: async (email: string, password: string) => {
     try {
-      set({ isAuthenticatedLoading: true });
       const response = await axiosInstance.post("/api/v1/auth/login", {
         email,
         password,
@@ -41,8 +41,6 @@ const useAuthStore = create<AuthState>((set) => ({
       toast.error(error.response?.data?.message || "Login failed.");
       console.error("Login error:", error);
       return 500;
-    } finally {
-      set({ isAuthenticatedLoading: false });
     }
   },
 

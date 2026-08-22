@@ -29,7 +29,7 @@ const ATSMatchCard = ({application}:{application: Application}) => {
                                         ? "Excellent Match"
                                         : application.atsMatchPercentage >= 75
                                             ? "Strong Match"
-                                            : application.atsMatchPercentage >= 65
+                                            : application.atsMatchPercentage >= 60
                                                 ? "Good Match"
                                                 : "Needs Review"}
                                 </span>
@@ -44,7 +44,7 @@ const ATSMatchCard = ({application}:{application: Application}) => {
                                     ? "bg-emerald-500"
                                     : application.atsMatchPercentage >= 75
                                         ? "bg-green-500"
-                                        : application.atsMatchPercentage >= 65
+                                        : application.atsMatchPercentage >= 60
                                             ? "bg-amber-500"
                                             : "bg-red-500"
                                     }`}
