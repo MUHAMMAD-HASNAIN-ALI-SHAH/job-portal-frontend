@@ -47,7 +47,7 @@ const Registration = () => {
   return (
     <>
       <Navbar />
-      <div className="min-h-[80vh] py-5 flex items-center justify-center bg-linear-to-tr from-gray-200 to-gray-300 px-4">
+      <div className="min-h-[80vh] pt-20 py-5 flex items-center justify-center bg-linear-to-tr from-gray-200 to-gray-300 px-4">
         <div className="relative bg-white rounded-md shadow-xl px-8 py-6 max-w-sm w-full">
           <div className="text-center mb-6">
             <h2 className="text-2xl font-bold text-gray-800 mb-1">
